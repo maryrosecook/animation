@@ -16,22 +16,20 @@
    :mouseout goog.events.EventType.MOUSEOUT
    :mousemove goog.events.EventType.MOUSEMOVE
    :focus goog.events.EventType.FOCUS
-   :blur goog.events.EventType.BLUR
-
-   :dragstart goog.events.EventType.DRAGSTART
-   :drag goog.events.EventType.DRAG
-   :dragenter goog.events.EventType.DRAGENTER
-   :dragover goog.events.EventType.DRAGOVER
-   :dragleave goog.events.EventType.DRAGLEAVE
-   :drop goog.events.EventType.DROP
-   :dragend goog.events.EventType.DRAGEND})
+   :blur goog.events.EventType.BLUR})
 
 (defn listen
   [element event-type fn]
   (events/listen element (keyword->event-type event-type) fn))
 
-(def screen (dom/getElement "screen"))
+(def canvas (dom/getElement "screen"))
+(def screen (.getContext canvas "2d"))
 
-(.log js/console (listen screen :mousedown (fn [] (println "hi"))))
-
-(println "working")
+(listen canvas
+        :mousemove
+        (fn [event]
+          (.fillRect screen
+                     (.-clientX event)
+                     (.-clientY event)
+                     2
+                     2)))
