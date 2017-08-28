@@ -27,7 +27,7 @@
 (def canvas (dom/getElement "screen"))
 (def screen (.getContext canvas "2d"))
 
-(def mouse-position (atom {}))
+(def mouse-position (atom {:x 0 :y 0}))
 
 (defn store-mouse-position
   [mouse-position canvas]
@@ -46,6 +46,21 @@
 
 (store-mouse-position mouse-position canvas)
 
-;; (add-watch mouse-position
-;;            :boom
-;;            (fn [_ _ _ state] (.log js/console (clj->js state))))
+(defn draw
+  [mouse-position screen]
+  (.fillRect screen
+             (mouse-position :x)
+             (mouse-position :y)
+             2
+             2))
+
+(defn tick
+  [mouse-position screen]
+  (draw (deref mouse-position) screen))
+
+(defn run
+  [mouse-position screen]
+  (tick mouse-position screen)
+  (js/requestAnimationFrame (partial run mouse-position screen)))
+
+(run mouse-position screen)
