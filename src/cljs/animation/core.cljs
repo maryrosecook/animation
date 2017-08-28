@@ -27,7 +27,7 @@
 (def canvas (dom/getElement "screen"))
 (def screen (.getContext canvas "2d"))
 
-(def input (atom {:mouse { :x 0 :y 0 }} ))
+(def input (atom {:mouse {:x 0 :y 0}} ))
 
 (defn store-mouse-position
   [input canvas]
@@ -35,8 +35,7 @@
           :mousemove
           (fn [event]
             (let [{x "clientX" y "clientY"} (dom-object->map event)]
-              (swap! input assoc-in [:mouse :x] x)
-              (swap! input assoc-in [:mouse :y] y)))))
+              (swap! input assoc :mouse {:x x :y y})))))
 
 (defn dom-object->map
   [dom-object]
