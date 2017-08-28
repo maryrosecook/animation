@@ -62,15 +62,14 @@
   (doseq [point (get state :mouse-down-points)]
     (.fillRect screen (get point :x) (get point :y) 2 2)))
 
-;; (def mouse-position #(get-in % [:mouse :position]))
+(def mouse-position #(get-in % [:mouse :position]))
 
 (defn accrue-mouse-down-points
   [input state]
-  (.log js/console (clj->js (count (get state :mouse-down-points))))
   (if (get-in input [:mouse :down?])
     (update state
             :mouse-down-points
-            #(conj % (get-in input [:mouse :position])))
+            #(conj % (mouse-position input)))
     state))
 
 (defn step-state
