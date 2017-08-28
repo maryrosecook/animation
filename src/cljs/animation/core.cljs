@@ -70,12 +70,11 @@
   (if (mouse-down? input)
     (update state
             :mouse-down-points
-            #(conj % (mouse-position input)))
-    state))
+            #(conj % (mouse-position input)))))
 
 (defn step-state
   [input state]
-    (accrue-mouse-down-points input state))
+    (or (accrue-mouse-down-points input state) state))
 
 (defn run
   [input state screen]
