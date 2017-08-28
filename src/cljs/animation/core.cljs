@@ -1,8 +1,10 @@
 (ns animation.core
   (:require [goog.dom :as dom]
-            [goog.events :as events]))
+            [goog.events :as events]
+            [clojure.browser.repl :as repl]))
 
 (enable-console-print!)
+(repl/connect "http://localhost:9000/repl")
 
 (def keyword->event-type
   {:keyup goog.events.EventType.KEYUP
@@ -25,11 +27,25 @@
 (def canvas (dom/getElement "screen"))
 (def screen (.getContext canvas "2d"))
 
-(listen canvas
-        :mousemove
-        (fn [event]
-          (.fillRect screen
-                     (.-clientX event)
-                     (.-clientY event)
-                     2
-                     2)))
+(def mouse-position (atom {}))
+
+(defn store-mouse-position
+  [mouse-position canvas]
+  (listen canvas
+          :mousemove
+          (fn [event]
+            (let [{x "clientX" y "clientY"} (dom-object->map event)]
+              (swap! mouse-position assoc :x x)
+              (swap! mouse-position assoc :y y)))))
+
+(defn dom-object->map
+  [dom-object]
+  (let [keys (.keys js/Object dom-object)
+        values (.values js/Object dom-object)]
+    (zipmap keys values)))
+
+(store-mouse-position mouse-position canvas)
+
+;; (add-watch mouse-position
+;;            :boom
+;;            (fn [_ _ _ state] (.log js/console (clj->js state))))
