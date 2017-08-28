@@ -59,11 +59,12 @@
 
 (defn draw
   [input screen]
-  (.fillRect screen
-             (get-in input [:mouse :position :x])
-             (get-in input [:mouse :position :y])
-             2
-             2))
+  (if (get-in input [:mouse :down?])
+    (.fillRect screen
+               (get-in input [:mouse :position :x])
+               (get-in input [:mouse :position :y])
+               2
+               2)))
 
 (defn tick
   [input screen]
