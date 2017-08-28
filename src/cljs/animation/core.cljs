@@ -59,22 +59,29 @@
 
 (defn draw
   [state screen]
-  ;; (if (get-in input [:mouse :down?])
-  ;;   (.fillRect screen
-  ;;              (get-in input [:mouse :position :x])
-  ;;              (get-in input [:mouse :position :y])
-  ;;              2
-  ;;              2))
-  )
+  (doseq [point (get state :mouse-down-points)]
+    (.fillRect screen (get point :x) (get point :y) 2 2)))
+
+;; (def mouse-position #(get-in % [:mouse :position]))
+
+(defn accrue-mouse-down-points
+  [input state]
+  (.log js/console (clj->js (count (get state :mouse-down-points))))
+  (if (get-in input [:mouse :down?])
+    (update state
+            :mouse-down-points
+            #(conj % (get-in input [:mouse :position])))
+    state))
 
 (defn step-state
   [input state]
-  (update state :count inc))
+    (accrue-mouse-down-points input state))
 
 (defn run
   [input state screen]
-  (let [next-state (step-state input state)]
+  (let [next-state (step-state (deref input) state)]
     (draw state screen)
     (js/requestAnimationFrame (partial run input next-state screen))))
 
-(run input {} screen)
+(def state {:mouse-down-points []})
+(run input state screen)
