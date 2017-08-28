@@ -27,7 +27,18 @@
 (def canvas (dom/getElement "screen"))
 (def screen (.getContext canvas "2d"))
 
-(def input (atom {:mouse {:x 0 :y 0}} ))
+(def input (atom {:mouse {:position {:x 0 :y 0} :down false}}))
+
+(defn store-mouse-is-down
+  [input canvas]
+  (listen canvas
+          :mousedown
+          (fn [event]
+            (swap! input assoc-in [:mouse :down?] true)))
+  (listen canvas
+          :mouseup
+          (fn [event]
+            (swap! input assoc-in [:mouse :down?] false))))
 
 (defn store-mouse-position
   [input canvas]
@@ -44,6 +55,7 @@
     (zipmap keys values)))
 
 (store-mouse-position input canvas)
+(store-mouse-is-down input canvas)
 
 (defn draw
   [input screen]
