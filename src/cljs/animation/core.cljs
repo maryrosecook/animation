@@ -63,10 +63,11 @@
     (.fillRect screen (get point :x) (get point :y) 2 2)))
 
 (def mouse-position #(get-in % [:mouse :position]))
+(def mouse-down? #(get-in % [:mouse :down?]))
 
 (defn accrue-mouse-down-points
   [input state]
-  (if (get-in input [:mouse :down?])
+  (if (mouse-down? input)
     (update state
             :mouse-down-points
             #(conj % (mouse-position input)))
