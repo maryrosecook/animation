@@ -35,7 +35,7 @@
           :mousemove
           (fn [event]
             (let [{x "clientX" y "clientY"} (dom-object->map event)]
-              (swap! input assoc :mouse {:x x :y y})))))
+              (swap! input assoc-in [:mouse :position] {:x x :y y})))))
 
 (defn dom-object->map
   [dom-object]
@@ -48,8 +48,8 @@
 (defn draw
   [input screen]
   (.fillRect screen
-             (get-in input [:mouse :x])
-             (get-in input [:mouse :y])
+             (get-in input [:mouse :position :x])
+             (get-in input [:mouse :position :y])
              2
              2))
 
