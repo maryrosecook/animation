@@ -27,16 +27,16 @@
 (def canvas (dom/getElement "screen"))
 (def screen (.getContext canvas "2d"))
 
-(def mouse-position (atom {:x 0 :y 0}))
+(def input (atom {:mouse { :x 0 :y 0 }} ))
 
 (defn store-mouse-position
-  [mouse-position canvas]
+  [input canvas]
   (listen canvas
           :mousemove
           (fn [event]
             (let [{x "clientX" y "clientY"} (dom-object->map event)]
-              (swap! mouse-position assoc :x x)
-              (swap! mouse-position assoc :y y)))))
+              (swap! input assoc-in [:mouse :x] x)
+              (swap! input assoc-in [:mouse :y] y)))))
 
 (defn dom-object->map
   [dom-object]
@@ -44,23 +44,23 @@
         values (.values js/Object dom-object)]
     (zipmap keys values)))
 
-(store-mouse-position mouse-position canvas)
+(store-mouse-position input canvas)
 
 (defn draw
-  [mouse-position screen]
+  [input screen]
   (.fillRect screen
-             (mouse-position :x)
-             (mouse-position :y)
+             (get-in input [:mouse :x])
+             (get-in input [:mouse :y])
              2
              2))
 
 (defn tick
-  [mouse-position screen]
-  (draw (deref mouse-position) screen))
+  [input screen]
+  (draw (deref input) screen))
 
 (defn run
-  [mouse-position screen]
-  (tick mouse-position screen)
-  (js/requestAnimationFrame (partial run mouse-position screen)))
+  [input screen]
+  (tick input screen)
+  (js/requestAnimationFrame (partial run input screen)))
 
-(run mouse-position screen)
+(run input screen)
