@@ -58,21 +58,23 @@
 (store-mouse-is-down input canvas)
 
 (defn draw
-  [input screen]
-  (if (get-in input [:mouse :down?])
-    (.fillRect screen
-               (get-in input [:mouse :position :x])
-               (get-in input [:mouse :position :y])
-               2
-               2)))
+  [state screen]
+  ;; (if (get-in input [:mouse :down?])
+  ;;   (.fillRect screen
+  ;;              (get-in input [:mouse :position :x])
+  ;;              (get-in input [:mouse :position :y])
+  ;;              2
+  ;;              2))
+  )
 
-(defn tick
-  [input screen]
-  (draw (deref input) screen))
+(defn step-state
+  [input state]
+  (update state :count inc))
 
 (defn run
-  [input screen]
-  (tick input screen)
-  (js/requestAnimationFrame (partial run input screen)))
+  [input state screen]
+  (let [next-state (step-state input state)]
+    (draw state screen)
+    (js/requestAnimationFrame (partial run input next-state screen))))
 
-(run input screen)
+(run input {} screen)
