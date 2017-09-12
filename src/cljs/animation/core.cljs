@@ -32,6 +32,8 @@
    {:mouse
     {:position {:x 0 :y 0}
      :down? false}}
+   {:key-down?
+    {}}
    ))
 
 (defn initial-state
@@ -56,6 +58,17 @@
             (let [{x "clientX" y "clientY"} (dom-object->map event)]
               (swap! input assoc-in [:mouse :position] {:x x :y y})))))
 
+(defn store-key-down
+  [input window]
+  (listen window
+          :keydown
+          (fn [event]
+            (swap! input assoc-in [:key-down? (.-keyCode event)] true)))
+  (listen window
+          :keyup
+          (fn [event]
+            (swap! input assoc-in [:key-down? (.-keyCode event)] false))))
+
 (defn dom-object->map
   [dom-object]
   (let [keys (.keys js/Object dom-object)
@@ -64,6 +77,7 @@
 
 (store-mouse-position input canvas)
 (store-mouse-is-down input canvas)
+(store-key-down input js/window)
 
 (defn draw
   [state screen]
