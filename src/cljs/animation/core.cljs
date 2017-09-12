@@ -50,6 +50,12 @@
           :mouseup
           (partial swap! input assoc-in [:mouse :down?] false)))
 
+(defn dom-object->map
+  [dom-object]
+  (let [keys (.keys js/Object dom-object)
+        values (.values js/Object dom-object)]
+    (zipmap keys values)))
+
 (defn store-mouse-position
   [input canvas]
   (listen canvas
@@ -68,12 +74,6 @@
           :keyup
           (fn [event]
             (swap! input assoc-in [:key-down? (.-keyCode event)] false))))
-
-(defn dom-object->map
-  [dom-object]
-  (let [keys (.keys js/Object dom-object)
-        values (.values js/Object dom-object)]
-    (zipmap keys values)))
 
 (store-mouse-position input canvas)
 (store-mouse-is-down input canvas)
