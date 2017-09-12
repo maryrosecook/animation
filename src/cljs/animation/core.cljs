@@ -37,12 +37,10 @@
   [input canvas]
   (listen canvas
           :mousedown
-          (fn [event]
-            (swap! input assoc-in [:mouse :down?] true)))
+          (partial swap! input assoc-in [:mouse :down?] true))
   (listen canvas
           :mouseup
-          (fn [event]
-            (swap! input assoc-in [:mouse :down?] false))))
+          (partial swap! input assoc-in [:mouse :down?] false)))
 
 (defn store-mouse-position
   [input canvas]
