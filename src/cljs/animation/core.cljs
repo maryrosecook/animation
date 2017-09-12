@@ -36,7 +36,8 @@
 
 (defn initial-state
   []
-  {:mouse-down-points []})
+  {:mouse-down-points []
+   :mode :draw})
 
 (defn store-mouse-is-down
   [input canvas]
