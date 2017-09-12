@@ -31,7 +31,8 @@
   (atom
    {:mouse
     {:position {:x 0 :y 0}
-     :down? false}}
+     :down? false
+     :drag-start nil}}
    {:key-down?
     {}}
    ))
@@ -40,6 +41,17 @@
   []
   {:mouse-down-points []
    :mode :draw})
+
+(defn dom-object->map
+  [dom-object]
+  (let [keys (.keys js/Object dom-object)
+        values (.values js/Object dom-object)]
+    (zipmap keys values)))
+
+(defn event->mouse-position
+  [event]
+  (let [{x "clientX" y "clientY"} (dom-object->map event)]
+    {:x x :y y}))
 
 (defn store-mouse-is-down
   [input canvas]
@@ -50,11 +62,16 @@
           :mouseup
           (partial swap! input assoc-in [:mouse :down?] false)))
 
-(defn dom-object->map
-  [dom-object]
-  (let [keys (.keys js/Object dom-object)
-        values (.values js/Object dom-object)]
-    (zipmap keys values)))
+(defn store-drag-start
+  [input canvas]
+  (listen canvas
+          :mousedown
+          (fn [event]
+            (if (not (mouse-down? input))
+              (swap! input
+                     assoc-in
+                     [:mouse :drag-start]
+                     (event->mouse-position event))))))
 
 (defn store-mouse-position
   [input canvas]
@@ -62,7 +79,10 @@
           :mousemove
           (fn [event]
             (let [{x "clientX" y "clientY"} (dom-object->map event)]
-              (swap! input assoc-in [:mouse :position] {:x x :y y})))))
+              (swap! input
+                     assoc-in
+                     [:mouse :position]
+                     (event->mouse-position event))))))
 
 (defn store-key-down
   [input window]
@@ -77,6 +97,7 @@
 
 (store-mouse-position input canvas)
 (store-mouse-is-down input canvas)
+(store-drag-start input canvas)
 (store-key-down input js/window)
 
 (defn draw
@@ -110,7 +131,6 @@
     (update state
             :mouse-down-points
             #(conj % (mouse-position input)))))
-
 
 (defn keyboard-selected-mode
   [input]
