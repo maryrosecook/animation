@@ -99,9 +99,14 @@
   {:w (or (.-innerWidth window) (.-clientWidth (.-body document)))
    :h (or (.-innerHeight window) (.-clientHeight (.-body document)))})
 
+(defn drawing?
+  [state]
+  (= :draw (get state :mode)))
+
 (defn accrue-mouse-down-points
   [input state]
-  (if (mouse-down? input)
+  (if (and (drawing? state)
+           (mouse-down? input))
     (update state
             :mouse-down-points
             #(conj % (mouse-position input)))))
