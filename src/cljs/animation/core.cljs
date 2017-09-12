@@ -65,6 +65,14 @@
 (def mouse-position #(get-in % [:mouse :position]))
 (def mouse-down? #(get-in % [:mouse :down?]))
 
+(defn set-canvas-size! [canvas {w :w h :h}]
+  (set! (. canvas -width) w)
+  (set! (. canvas -height) h))
+
+(defn get-window-size [window document]
+  {:w (or (.-innerWidth window) (.-clientWidth (.-body document)))
+   :h (or (.-innerHeight window) (.-clientHeight (.-body document)))})
+
 (defn accrue-mouse-down-points
   [input state]
   (if (mouse-down? input)
@@ -81,6 +89,8 @@
   (let [next-state (step-state (deref input) state)]
     (draw state screen)
     (js/requestAnimationFrame (partial run input next-state screen))))
+
+(set-canvas-size! canvas (get-window-size js/window js/document))
 
 (def state {:mouse-down-points []})
 (run input state screen)
