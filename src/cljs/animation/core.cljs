@@ -86,6 +86,10 @@
 
 (def mouse-position #(get-in % [:mouse :position]))
 (def mouse-down? #(get-in % [:mouse :down?]))
+(def key-down? (fn [state key-code] (get-in state [:key-down? key-code])))
+(defn key-codes-down
+  [input]
+  (map first (filter (fn [[_, down?]] down?) (input :key-down?))))
 
 (defn set-canvas-size! [canvas {w :w h :h}]
   (set! (. canvas -width) w)
@@ -102,9 +106,28 @@
             :mouse-down-points
             #(conj % (mouse-position input)))))
 
+
+(defn keyboard-selected-mode
+  [input]
+  (let [button-maps {49 :select
+                     50 :draw}]
+    (get button-maps (first (key-codes-down input)))))
+
+(defn set-mode
+  [input state]
+  (if-let [new-mode (keyboard-selected-mode input)]
+    (assoc state :mode new-mode)))
+
 (defn step-state
   [input state]
-    (or (accrue-mouse-down-points input state) state))
+  (.log js/console (clj->js (get state :mode)))
+
+  (let [state-after-set-mode (or (set-mode input state) state)
+        state-after-accrue (or (accrue-mouse-down-points
+                                input
+                                state-after-set-mode)
+                               state-after-set-mode)]
+  state-after-accrue))
 
 (defn run
   [input state screen]
