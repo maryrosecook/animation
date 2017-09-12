@@ -39,7 +39,7 @@
 
 (defn initial-state
   []
-  {:mouse-down-points []
+  {:points []
    :mode :draw})
 
 (defn dom-object->map
@@ -100,9 +100,14 @@
 (store-drag-start input canvas)
 (store-key-down input js/window)
 
+(defn clear-screen
+  [screen window-size]
+  (.clearRect screen 0 0 (get window-size :w) (get window-size :h)))
+
 (defn draw
   [state screen]
-  (doseq [point (get state :mouse-down-points)]
+  (clear-screen screen (get-window-size js/window js/document))
+  (doseq [point (get state :points)]
     (.fillRect screen (get point :x) (get point :y) 5 5)))
 
 (def mouse-position #(get-in % [:mouse :position]))
@@ -124,12 +129,16 @@
   [state]
   (= :draw (get state :mode)))
 
+(defn add-vectors
+  [{x1 :x y1 :y} {x2 :x y2 :y}]
+  {:x (- x1 x2) :y (- y1 y2)})
+
 (defn draw-points
   [input state]
   (if (and (drawing? state)
            (mouse-down? input))
     (update state
-            :mouse-down-points
+            :points
             #(conj % (mouse-position input)))))
 
 (defn keyboard-selected-mode
@@ -144,6 +153,13 @@
   (if-let [new-mode (keyboard-selected-mode input)]
     (assoc state :mode new-mode)))
 
+(defn move
+  [input state]
+  (update state
+          :points
+          (partial map
+                   (fn [point] (add-vectors point {:x 1 :y 1})))))
+
 (defn default
   [fn value]
   (or (fn value) value))
@@ -152,7 +168,8 @@
   [input state]
   (->> state
        (default (partial set-mode input))
-       (default (partial draw-points input))))
+       (default (partial draw-points input))
+       (default (partial move input))))
 
 (defn run
   [input state screen]
