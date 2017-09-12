@@ -29,6 +29,10 @@
 
 (def input (atom {:mouse {:position {:x 0 :y 0} :down? false}}))
 
+(defn initial-state
+  []
+  {:mouse-down-points []})
+
 (defn store-mouse-is-down
   [input canvas]
   (listen canvas
@@ -92,5 +96,6 @@
 
 (set-canvas-size! canvas (get-window-size js/window js/document))
 
-(def state {:mouse-down-points []})
-(run input state screen)
+(run input
+  (initial-state)
+  screen)
