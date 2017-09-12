@@ -103,7 +103,7 @@
   [state]
   (= :draw (get state :mode)))
 
-(defn accrue-mouse-down-points
+(defn draw-points
   [input state]
   (if (and (drawing? state)
            (mouse-down? input))
@@ -131,7 +131,7 @@
   [input state]
   (->> state
        (default (partial set-mode input))
-       (default (partial accrue-mouse-down-points input))))
+       (default (partial draw-points input))))
 
 (defn run
   [input state screen]
