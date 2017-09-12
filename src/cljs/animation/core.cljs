@@ -120,8 +120,6 @@
 
 (defn step-state
   [input state]
-  (.log js/console (clj->js (get state :mode)))
-
   (let [state-after-set-mode (or (set-mode input state) state)
         state-after-accrue (or (accrue-mouse-down-points
                                 input
