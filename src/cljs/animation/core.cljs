@@ -115,7 +115,8 @@
 (defn keyboard-selected-mode
   [input]
   (let [button-maps {49 :select
-                     50 :draw}]
+                     50 :draw
+                     51 :move}]
     (get button-maps (first (key-codes-down input)))))
 
 (defn set-mode
