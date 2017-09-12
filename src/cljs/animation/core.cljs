@@ -155,10 +155,11 @@
 
 (defn move
   [input state]
-  (update state
-          :points
-          (partial map
-                   (fn [point] (add-vectors point {:x 1 :y 1})))))
+  (if (mouse-down? input)
+    (update state
+            :points
+            (partial map
+                     (fn [point] (add-vectors point {:x 1 :y 1}))))))
 
 (defn default
   [fn value]
