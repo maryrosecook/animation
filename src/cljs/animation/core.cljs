@@ -62,7 +62,7 @@
 (defn draw
   [state screen]
   (doseq [point (get state :mouse-down-points)]
-    (.fillRect screen (get point :x) (get point :y) 2 2)))
+    (.fillRect screen (get point :x) (get point :y) 5 5)))
 
 (def mouse-position #(get-in % [:mouse :position]))
 (def mouse-down? #(get-in % [:mouse :down?]))
