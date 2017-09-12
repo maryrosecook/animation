@@ -32,10 +32,8 @@
    {:mouse
     {:position {:x 0 :y 0}
      :down? false
-     :drag-start nil}}
-   {:key-down?
-    {}}
-   ))
+     :drag {:previous nil :current nil}}
+    :key-down? {}}))
 
 (defn initial-state
   []
@@ -62,27 +60,40 @@
           :mouseup
           (partial swap! input assoc-in [:mouse :down?] false)))
 
-(defn store-drag-start
+(defn store-drag
   [input canvas]
   (listen canvas
           :mousedown
           (fn [event]
-            (if (not (mouse-down? input))
+            (let [current (event->mouse-position event)]
               (swap! input
                      assoc-in
-                     [:mouse :drag-start]
-                     (event->mouse-position event))))))
+                     [:mouse :drag]
+                     {:current current :previous current}))))
+  (listen canvas
+          :mousemove
+          (fn [event]
+            (if (mouse-down? (deref input))
+              (let [previous (get-in (deref input) [:mouse :drag :current])
+                    current (event->mouse-position event)]
+                (swap! input
+                       assoc-in
+                       [:mouse :drag]
+                       {:current current :previous previous})))))
+  (listen canvas
+          :mouseup
+          (fn [event]
+            (swap! input assoc-in [:mouse :drag] nil))))
 
 (defn store-mouse-position
   [input canvas]
   (listen canvas
           :mousemove
           (fn [event]
-            (let [{x "clientX" y "clientY"} (dom-object->map event)]
-              (swap! input
-                     assoc-in
-                     [:mouse :position]
-                     (event->mouse-position event))))))
+            (swap! input
+                   assoc-in
+                   [:mouse :position]
+                   (event->mouse-position event)))))
 
 (defn store-key-down
   [input window]
@@ -97,7 +108,7 @@
 
 (store-mouse-position input canvas)
 (store-mouse-is-down input canvas)
-(store-drag-start input canvas)
+(store-drag input canvas)
 (store-key-down input js/window)
 
 (defn clear-screen
@@ -160,12 +171,12 @@
   [input state]
   (if (and (mouse-down? input)
            (move-mode? state))
-    (let [move-by (subtract-vectors (get-in input [:mouse :position])
-                                    (get-in input [:mouse :drag-start]))]
-    (update state
-            :points
-            (partial map
-                     (fn [point] (add-vectors point {:x -1 :y -1})))))))
+    (let [move-by (subtract-vectors (get-in input [:mouse :drag :current])
+                                    (get-in input [:mouse :drag :previous]))]
+      (update state
+              :points
+              (partial map
+                       (fn [point] (add-vectors point move-by)))))))
 
 (defn default
   [fn value]
