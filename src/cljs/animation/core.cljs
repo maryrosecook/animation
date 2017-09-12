@@ -123,14 +123,15 @@
   (if-let [new-mode (keyboard-selected-mode input)]
     (assoc state :mode new-mode)))
 
+(defn default
+  [fn value]
+  (or (fn value) value))
+
 (defn step-state
   [input state]
-  (let [state-after-set-mode (or (set-mode input state) state)
-        state-after-accrue (or (accrue-mouse-down-points
-                                input
-                                state-after-set-mode)
-                               state-after-set-mode)]
-  state-after-accrue))
+  (->> state
+       (default (partial set-mode input))
+       (default (partial accrue-mouse-down-points input))))
 
 (defn run
   [input state screen]
