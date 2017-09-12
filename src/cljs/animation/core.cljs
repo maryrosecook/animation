@@ -125,9 +125,7 @@
   {:w (or (.-innerWidth window) (.-clientWidth (.-body document)))
    :h (or (.-innerHeight window) (.-clientHeight (.-body document)))})
 
-(defn drawing?
-  [state]
-  (= :draw (get state :mode)))
+(defn draw-mode? [state] (= :draw (get state :mode)))
 
 (defn add-vectors
   [{x1 :x y1 :y} {x2 :x y2 :y}]
@@ -135,7 +133,7 @@
 
 (defn draw-points
   [input state]
-  (if (and (drawing? state)
+  (if (and (draw-mode? state)
            (mouse-down? input))
     (update state
             :points
