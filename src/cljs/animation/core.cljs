@@ -27,7 +27,12 @@
 (def canvas (dom/getElement "screen"))
 (def screen (.getContext canvas "2d"))
 
-(def input (atom {:mouse {:position {:x 0 :y 0} :down? false}}))
+(def input
+  (atom
+   {:mouse
+    {:position {:x 0 :y 0}
+     :down? false}}
+   ))
 
 (defn initial-state
   []
