@@ -40,6 +40,16 @@
   {:points []
    :mode :draw})
 
+(defn create-tick
+  []
+  (defn forever
+    [function]
+    (function)
+    (js/requestAnimationFrame (partial forever function)))
+  (let [tick (atom 0)]
+    (forever (fn [] (swap! tick inc)))
+    tick))
+
 (defn dom-object->map
   [dom-object]
   (let [keys (.keys js/Object dom-object)
@@ -190,13 +200,14 @@
        (default (partial move input))))
 
 (defn run
-  [input state screen]
-  (let [next-state (step-state (deref input) state)]
-    (draw state screen)
-    (js/requestAnimationFrame (partial run input next-state screen))))
+  [input _state tick screen]
+  (let [state (atom _state)]
+    (add-watch tick :update #(reset! state (step-state @input @state)))
+    (add-watch tick :draw #(draw @state screen))))
 
 (set-canvas-size! canvas (get-window-size js/window js/document))
 
 (run input
   (initial-state)
+  (create-tick)
   screen)
