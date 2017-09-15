@@ -171,7 +171,7 @@
   (if-let [new-mode (keyboard-selected-mode input)]
     (assoc state :mode new-mode)))
 
-(defn move
+(defn move-points
   [input state]
   (if (and (mouse-down? input)
            (move-mode? state))
@@ -190,7 +190,7 @@
   (->> state
        (default (partial set-mode input))
        (default (partial draw-points input))
-       (default (partial move input))))
+       (default (partial move-points input))))
 
 (defn run
   [input _state tick screen]
