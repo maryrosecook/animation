@@ -175,11 +175,11 @@
   [input state]
   (if (and (mouse-down? input)
            (move-mode? state))
-    (let [move-by (drag-delta input)]
-      (update state
-              :points
-              (partial map
-                       (fn [point] (add-vectors point move-by)))))))
+    (update state
+            :points
+            (partial map
+                     (fn [point] (add-vectors point
+                                              (drag-delta input))))))))
 
 (defn default
   [fn value]
