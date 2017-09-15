@@ -1,7 +1,8 @@
 (ns animation.core
   (:require [goog.dom :as dom]
             [goog.events :as events]
-            [clojure.browser.repl :as repl]))
+            [clojure.browser.repl :as repl]
+            [animation.geometry :as geometry]))
 
 (enable-console-print!)
 (repl/connect "http://localhost:9000/repl")
@@ -74,7 +75,7 @@
   [input]
   (let [drag (get-in input [:mouse :drag])]
     (if (drag :previous)
-      (subtract-vectors (drag :current) (drag :previous))
+      (geometry/subtract-vectors (drag :current) (drag :previous))
       {:x 0 :y 0})))
 
 (defn current-drag
@@ -143,14 +144,6 @@
 (defn draw-mode? [state] (= :draw (get state :mode)))
 (defn move-mode? [state] (= :move (get state :mode)))
 
-(defn add-vectors
-  [{x1 :x y1 :y} {x2 :x y2 :y}]
-  {:x (+ x1 x2) :y (+ y1 y2)})
-
-(defn subtract-vectors
-  [{x1 :x y1 :y} {x2 :x y2 :y}]
-  {:x (- x1 x2) :y (- y1 y2)})
-
 (defn draw-points
   [input state]
   (if (and (draw-mode? state)
@@ -178,8 +171,9 @@
     (update state
             :points
             (partial map
-                     (fn [point] (add-vectors point
-                                              (drag-delta input)))))))
+                     (fn [point] (geometry/add-vectors
+                                  point
+                                  (drag-delta input)))))))
 
 (defn default
   [fn value]
