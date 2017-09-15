@@ -70,18 +70,29 @@
           :mouseup
           (partial swap! input assoc-in [:mouse :down?] false)))
 
+(defn drag-delta
+  [input]
+  (let [drag (get-in input [:mouse :drag])]
+    (if (drag :previous)
+      (subtract-vectors (drag :current) (drag :previous))
+      {:x 0 :y 0})))
+
+(defn current-drag
+  [input]
+  (if (mouse-down? input)
+    {:current (get-in input [:mouse :position])
+     :previous (get-in input [:mouse :drag :current])}
+    {:current nil :previous :nil}))
+
 (defn store-drag
   [input tick]
   (add-watch tick
              :drag
              (fn []
-               (if (mouse-down? @input)
-                 (let [previous (get-in @input [:mouse :drag :current])
-                       current (get-in @input [:mouse :position])]
-                   (swap! input
-                          assoc-in
-                          [:mouse :drag]
-                          {:current current :previous previous}))))))
+               (swap! input
+                      assoc-in
+                      [:mouse :drag]
+                      (current-drag @input)))))
 
 (defn store-mouse-position
   [input canvas]
@@ -168,8 +179,7 @@
   [input state]
   (if (and (mouse-down? input)
            (move-mode? state))
-    (let [move-by (subtract-vectors (get-in input [:mouse :drag :current])
-                                    (get-in input [:mouse :drag :previous]))]
+    (let [move-by (drag-delta input)]
       (update state
               :points
               (partial map
