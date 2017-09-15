@@ -179,7 +179,7 @@
             :points
             (partial map
                      (fn [point] (add-vectors point
-                                              (drag-delta input))))))))
+                                              (drag-delta input)))))))
 
 (defn default
   [fn value]
