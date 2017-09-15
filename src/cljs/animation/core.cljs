@@ -71,29 +71,17 @@
           (partial swap! input assoc-in [:mouse :down?] false)))
 
 (defn store-drag
-  [input canvas]
-  (listen canvas
-          :mousedown
-          (fn [event]
-            (let [current (event->mouse-position event)]
-              (swap! input
-                     assoc-in
-                     [:mouse :drag]
-                     {:current current :previous current}))))
-  (listen canvas
-          :mousemove
-          (fn [event]
-            (if (mouse-down? (deref input))
-              (let [previous (get-in (deref input) [:mouse :drag :current])
-                    current (event->mouse-position event)]
-                (swap! input
-                       assoc-in
-                       [:mouse :drag]
-                       {:current current :previous previous})))))
-  (listen canvas
-          :mouseup
-          (fn [event]
-            (swap! input assoc-in [:mouse :drag] nil))))
+  [input tick]
+  (add-watch tick
+             :drag
+             (fn []
+               (if (mouse-down? @input)
+                 (let [previous (get-in @input [:mouse :drag :current])
+                       current (get-in @input [:mouse :position])]
+                   (swap! input
+                          assoc-in
+                          [:mouse :drag]
+                          {:current current :previous previous}))))))
 
 (defn store-mouse-position
   [input canvas]
@@ -118,7 +106,6 @@
 
 (store-mouse-position input canvas)
 (store-mouse-is-down input canvas)
-(store-drag input canvas)
 (store-key-down input js/window)
 
 (defn clear-screen
@@ -202,6 +189,7 @@
 (defn run
   [input _state tick screen]
   (let [state (atom _state)]
+    (store-drag input tick)
     (add-watch tick :update #(reset! state (step-state @input @state)))
     (add-watch tick :draw #(draw @state screen))))
 
