@@ -88,11 +88,7 @@
   [input tick]
   (add-watch tick
              :drag
-             (fn []
-               (swap! input
-                      assoc-in
-                      [:mouse :drag]
-                      (current-drag @input)))))
+             #(swap! input assoc-in [:mouse :drag] (current-drag @input))))
 
 (defn store-mouse-position
   [input canvas]
