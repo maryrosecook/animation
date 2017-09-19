@@ -78,6 +78,13 @@
       (geometry/subtract-vectors (drag :current) (drag :previous))
       {:x 0 :y 0})))
 
+(def mouse-position #(get-in % [:mouse :position]))
+(def mouse-down? #(get-in % [:mouse :down?]))
+(def key-down? (fn [state key-code] (get-in state [:key-down? key-code])))
+(defn key-codes-down
+  [input]
+  (map first (filter (fn [[_, down?]] down?) (input :key-down?))))
+
 (defn current-drag
   [input]
   (if (mouse-down? input)
@@ -120,26 +127,19 @@
   [screen window-size]
   (.clearRect screen 0 0 (get window-size :w) (get window-size :h)))
 
+(defn get-window-size [window document]
+  {:w (or (.-innerWidth window) (.-clientWidth (.-body document)))
+   :h (or (.-innerHeight window) (.-clientHeight (.-body document)))})
+
 (defn draw
   [state screen]
   (clear-screen screen (get-window-size js/window js/document))
   (doseq [point (get state :points)]
     (.fillRect screen (get point :x) (get point :y) 5 5)))
 
-(def mouse-position #(get-in % [:mouse :position]))
-(def mouse-down? #(get-in % [:mouse :down?]))
-(def key-down? (fn [state key-code] (get-in state [:key-down? key-code])))
-(defn key-codes-down
-  [input]
-  (map first (filter (fn [[_, down?]] down?) (input :key-down?))))
-
 (defn set-canvas-size! [canvas {w :w h :h}]
   (set! (. canvas -width) w)
   (set! (. canvas -height) h))
-
-(defn get-window-size [window document]
-  {:w (or (.-innerWidth window) (.-clientWidth (.-body document)))
-   :h (or (.-innerHeight window) (.-clientHeight (.-body document)))})
 
 (defn draw-mode? [state] (= :draw (get state :mode)))
 (defn move-mode? [state] (= :move (get state :mode)))
