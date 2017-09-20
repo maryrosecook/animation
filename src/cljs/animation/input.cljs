@@ -23,7 +23,7 @@
      :drag {:previous nil :current nil}}
     :key-down? {}}))
 
-(defn listen
+(defn on
   [element event-type fn]
   (events/listen element (keyword->event-type event-type) fn))
 
@@ -40,12 +40,12 @@
 
 (defn store-mouse-is-down
   [input canvas]
-  (listen canvas
-          :mousedown
-          (partial swap! input assoc-in [:mouse :down?] true))
-  (listen canvas
-          :mouseup
-          (partial swap! input assoc-in [:mouse :down?] false)))
+  (on canvas
+      :mousedown
+      (partial swap! input assoc-in [:mouse :down?] true))
+  (on canvas
+      :mouseup
+      (partial swap! input assoc-in [:mouse :down?] false)))
 
 (def mouse-position #(get-in % [:mouse :position]))
 (def mouse-down? #(get-in % [:mouse :down?]))
@@ -55,24 +55,24 @@
 
 (defn store-mouse-position
   [input canvas]
-  (listen canvas
-          :mousemove
-          (fn [event]
-            (swap! input
-                   assoc-in
-                   [:mouse :position]
-                   (event->mouse-position event)))))
+  (on canvas
+      :mousemove
+      (fn [event]
+        (swap! input
+               assoc-in
+               [:mouse :position]
+               (event->mouse-position event)))))
 
 (defn store-key-down
   [input window]
-  (listen window
-          :keydown
-          (fn [event]
-            (swap! input assoc-in [:key-down? (.-keyCode event)] true)))
-  (listen window
-          :keyup
-          (fn [event]
-            (swap! input assoc-in [:key-down? (.-keyCode event)] false))))
+  (on window
+      :keydown
+      (fn [event]
+        (swap! input assoc-in [:key-down? (.-keyCode event)] true)))
+  (on window
+      :keyup
+      (fn [event]
+        (swap! input assoc-in [:key-down? (.-keyCode event)] false))))
 
 (defn store-input
   [canvas window]
