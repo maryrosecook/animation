@@ -88,14 +88,14 @@
        (default (partial move-points input))))
 
 (defn run
-  [_state screen]
+  [_state input screen]
   (set-canvas-size! canvas (get-window-size js/window js/document))
-  (input/store-input canvas js/window)
 
   (let [state (atom _state)]
-    (on-tick #(reset! state (step-state @input/input @state)))
+    (on-tick #(reset! state (step-state @input @state)))
     (on-tick #(draw @state screen))))
 
 (run
   (initial-state)
+  (input/input canvas js/window)
   screen)

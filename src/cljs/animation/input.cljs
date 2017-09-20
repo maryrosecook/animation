@@ -16,7 +16,8 @@
    :focus goog.events.EventType.FOCUS
    :blur goog.events.EventType.BLUR})
 
-(def input
+(defn create-input
+  []
   (atom
    {:mouse
     {:position {:x 0 :y 0}
@@ -86,9 +87,12 @@
   [input]
   (swap! input assoc-in [:mouse :drag] (current-drag @input)))
 
-(defn store-input
+(defn input
   [canvas window]
-  (on-tick #(store-drag input))
-  (store-mouse-position input canvas)
-  (store-mouse-is-down input canvas)
-  (store-key-down input window))
+  (let [input (create-input)]
+    (on-tick #(store-drag input))
+    (store-mouse-position input canvas)
+    (store-mouse-is-down input canvas)
+    (store-key-down input window)
+
+    input))
