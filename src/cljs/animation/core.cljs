@@ -2,10 +2,11 @@
   (:require [goog.dom :as dom]
             [goog.events :as events]
             [clojure.browser.repl :as repl]
-            [animation.geometry :as geometry]))
+            [animation.geometry :as geometry]
+            [animation.tick :refer [on-tick]]))
 
 (enable-console-print!)
-(repl/connect "http://localhost:9000/repl")
+;; (repl/connect "http://localhost:9000/repl")
 
 (def keyword->event-type
   {:keyup goog.events.EventType.KEYUP
@@ -40,16 +41,6 @@
   []
   {:points []
    :mode :draw})
-
-(defn create-tick
-  []
-  (defn forever
-    [function]
-    (function)
-    (js/requestAnimationFrame (partial forever function)))
-  (let [tick (atom 0)]
-    (forever (fn [] (swap! tick inc)))
-    tick))
 
 (defn dom-object->map
   [dom-object]
@@ -91,12 +82,6 @@
     {:current (get-in input [:mouse :position])
      :previous (get-in input [:mouse :drag :current])}
     {:current nil :previous :nil}))
-
-(defn store-drag
-  [input tick]
-  (add-watch tick
-             :drag
-             #(swap! input assoc-in [:mouse :drag] (current-drag @input))))
 
 (defn store-mouse-position
   [input canvas]
@@ -186,16 +171,19 @@
        (default (partial draw-points input))
        (default (partial move-points input))))
 
+(defn store-drag
+  [input]
+  (swap! input assoc-in [:mouse :drag] (current-drag @input)))
+
 (defn run
-  [input _state tick screen]
+  [input _state screen]
   (let [state (atom _state)]
-    (store-drag input tick)
-    (add-watch tick :update #(reset! state (step-state @input @state)))
-    (add-watch tick :draw #(draw @state screen))))
+    (on-tick #(store-drag input))
+    (on-tick #(reset! state (step-state @input @state)))
+    (on-tick #(draw @state screen))))
 
 (set-canvas-size! canvas (get-window-size js/window js/document))
 
 (run input
   (initial-state)
-  (create-tick)
   screen)
