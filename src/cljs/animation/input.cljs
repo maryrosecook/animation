@@ -1,5 +1,6 @@
 (ns animation.input
-  (:require [goog.events :as events]))
+  (:require [goog.events :as events]
+            [animation.tick :refer [on-tick]]))
 
 (def keyword->event-type
   {:keyup goog.events.EventType.KEYUP
@@ -74,8 +75,20 @@
       (fn [event]
         (swap! input assoc-in [:key-down? (.-keyCode event)] false))))
 
+(defn current-drag
+  [input]
+  (if (mouse-down? input)
+    {:current (get-in input [:mouse :position])
+     :previous (get-in input [:mouse :drag :current])}
+    {:current nil :previous :nil}))
+
+(defn store-drag
+  [input]
+  (swap! input assoc-in [:mouse :drag] (current-drag @input)))
+
 (defn store-input
   [canvas window]
+  (on-tick #(store-drag input))
   (store-mouse-position input canvas)
   (store-mouse-is-down input canvas)
   (store-key-down input window))

@@ -24,13 +24,6 @@
       (geometry/subtract-vectors (drag :current) (drag :previous))
       {:x 0 :y 0})))
 
-(defn current-drag
-  [input]
-  (if (input/mouse-down? input)
-    {:current (get-in input [:mouse :position])
-     :previous (get-in input [:mouse :drag :current])}
-    {:current nil :previous :nil}))
-
 (defn clear-screen
   [screen window-size]
   (.clearRect screen 0 0 (get window-size :w) (get window-size :h)))
@@ -94,17 +87,12 @@
        (default (partial draw-points input))
        (default (partial move-points input))))
 
-(defn store-drag
-  [input]
-  (swap! input assoc-in [:mouse :drag] (current-drag @input)))
-
 (defn run
   [_state screen]
   (set-canvas-size! canvas (get-window-size js/window js/document))
   (input/store-input canvas js/window)
 
   (let [state (atom _state)]
-    (on-tick #(store-drag input/input))
     (on-tick #(reset! state (step-state @input/input @state)))
     (on-tick #(draw @state screen))))
 
