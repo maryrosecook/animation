@@ -15,7 +15,8 @@
 (defn initial-state
   []
   {:points []
-   :mode :draw})
+   :mode :draw
+   :point-group 0})
 
 (defn drag-delta
   [input]
