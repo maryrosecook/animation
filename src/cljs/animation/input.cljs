@@ -49,6 +49,7 @@
       :mouseup
       (partial swap! input assoc-in [:mouse :down?] false)))
 
+(def mouse-drag #(get-in % [:mouse :drag]))
 (def mouse-position #(get-in % [:mouse :position]))
 (def mouse-down? #(get-in % [:mouse :down?]))
 (defn key-codes-down

@@ -19,7 +19,7 @@
 
 (defn drag-delta
   [input]
-  (let [drag (get-in input [:mouse :drag])]
+  (let [drag (input/mouse-drag input)]
     (if (drag :previous)
       (geometry/subtract-vectors (drag :current) (drag :previous))
       {:x 0 :y 0})))
