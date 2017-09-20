@@ -3,64 +3,19 @@
             [goog.events :as events]
             [clojure.browser.repl :as repl]
             [animation.geometry :as geometry]
-            [animation.tick :refer [on-tick]]))
+            [animation.tick :refer [on-tick]]
+            [animation.input :as input]))
 
 (enable-console-print!)
 ;; (repl/connect "http://localhost:9000/repl")
 
-(def keyword->event-type
-  {:keyup goog.events.EventType.KEYUP
-   :keydown goog.events.EventType.KEYDOWN
-   :keypress goog.events.EventType.KEYPRESS
-   :click goog.events.EventType.CLICK
-   :dblclick goog.events.EventType.DBLCLICK
-   :mousedown goog.events.EventType.MOUSEDOWN
-   :mouseup goog.events.EventType.MOUSEUP
-   :mouseover goog.events.EventType.MOUSEOVER
-   :mouseout goog.events.EventType.MOUSEOUT
-   :mousemove goog.events.EventType.MOUSEMOVE
-   :focus goog.events.EventType.FOCUS
-   :blur goog.events.EventType.BLUR})
-
-(defn listen
-  [element event-type fn]
-  (events/listen element (keyword->event-type event-type) fn))
-
 (def canvas (dom/getElement "screen"))
 (def screen (.getContext canvas "2d"))
-
-(def input
-  (atom
-   {:mouse
-    {:position {:x 0 :y 0}
-     :down? false
-     :drag {:previous nil :current nil}}
-    :key-down? {}}))
 
 (defn initial-state
   []
   {:points []
    :mode :draw})
-
-(defn dom-object->map
-  [dom-object]
-  (let [keys (.keys js/Object dom-object)
-        values (.values js/Object dom-object)]
-    (zipmap keys values)))
-
-(defn event->mouse-position
-  [event]
-  (let [{x "clientX" y "clientY"} (dom-object->map event)]
-    {:x x :y y}))
-
-(defn store-mouse-is-down
-  [input canvas]
-  (listen canvas
-          :mousedown
-          (partial swap! input assoc-in [:mouse :down?] true))
-  (listen canvas
-          :mouseup
-          (partial swap! input assoc-in [:mouse :down?] false)))
 
 (defn drag-delta
   [input]
@@ -69,44 +24,12 @@
       (geometry/subtract-vectors (drag :current) (drag :previous))
       {:x 0 :y 0})))
 
-(def mouse-position #(get-in % [:mouse :position]))
-(def mouse-down? #(get-in % [:mouse :down?]))
-(def key-down? (fn [state key-code] (get-in state [:key-down? key-code])))
-(defn key-codes-down
-  [input]
-  (map first (filter (fn [[_, down?]] down?) (input :key-down?))))
-
 (defn current-drag
   [input]
-  (if (mouse-down? input)
+  (if (input/mouse-down? input)
     {:current (get-in input [:mouse :position])
      :previous (get-in input [:mouse :drag :current])}
     {:current nil :previous :nil}))
-
-(defn store-mouse-position
-  [input canvas]
-  (listen canvas
-          :mousemove
-          (fn [event]
-            (swap! input
-                   assoc-in
-                   [:mouse :position]
-                   (event->mouse-position event)))))
-
-(defn store-key-down
-  [input window]
-  (listen window
-          :keydown
-          (fn [event]
-            (swap! input assoc-in [:key-down? (.-keyCode event)] true)))
-  (listen window
-          :keyup
-          (fn [event]
-            (swap! input assoc-in [:key-down? (.-keyCode event)] false))))
-
-(store-mouse-position input canvas)
-(store-mouse-is-down input canvas)
-(store-key-down input js/window)
 
 (defn clear-screen
   [screen window-size]
@@ -132,17 +55,17 @@
 (defn draw-points
   [input state]
   (if (and (draw-mode? state)
-           (mouse-down? input))
+           (input/mouse-down? input))
     (update state
             :points
-            #(conj % (mouse-position input)))))
+            #(conj % (input/mouse-position input)))))
 
 (defn keyboard-selected-mode
   [input]
   (let [button-maps {49 :select
                      50 :draw
                      51 :move}]
-    (get button-maps (first (key-codes-down input)))))
+    (get button-maps (first (input/key-codes-down input)))))
 
 (defn set-mode
   [input state]
@@ -151,7 +74,7 @@
 
 (defn move-points
   [input state]
-  (if (and (mouse-down? input)
+  (if (and (input/mouse-down? input)
            (move-mode? state))
     (update state
             :points
@@ -176,14 +99,15 @@
   (swap! input assoc-in [:mouse :drag] (current-drag @input)))
 
 (defn run
-  [input _state screen]
+  [_state screen]
+  (set-canvas-size! canvas (get-window-size js/window js/document))
+  (input/store-input canvas js/window)
+
   (let [state (atom _state)]
-    (on-tick #(store-drag input))
-    (on-tick #(reset! state (step-state @input @state)))
+    (on-tick #(store-drag input/input))
+    (on-tick #(reset! state (step-state @input/input @state)))
     (on-tick #(draw @state screen))))
 
-(set-canvas-size! canvas (get-window-size js/window js/document))
-
-(run input
+(run
   (initial-state)
   screen)
