@@ -47,13 +47,21 @@
 (defn move-mode? [state] (= :move (get state :mode)))
 (def point-group #(% :point-group))
 
+(defn create-point
+  [position group]
+  (assoc position :group group))
+
+(defn add-point
+  [state point]
+  (update state :points #(conj % point)))
+
 (defn draw-points
   [input state]
   (if (and (draw-mode? state)
            (input/mouse-down? input))
-    (update state
-            :points
-            #(conj % (input/mouse-position input)))))
+    (let [point (create-point (input/mouse-position input)
+                              (point-group state))]
+      (add-point state point))))
 
 (defn keyboard-selected-mode
   [input]
