@@ -22,8 +22,10 @@
    {:mouse
     {:position {:x 0 :y 0}
      :down? false
+     :clicked? false
      :drag {:previous nil :current nil}}
-    :key-down? {}}))
+    :key-down? {}
+    :read-fns []}))
 
 (defn on
   [element event-type fn]
@@ -52,6 +54,7 @@
 (def mouse-drag #(get-in % [:mouse :drag]))
 (def mouse-position #(get-in % [:mouse :position]))
 (def mouse-down? #(get-in % [:mouse :down?]))
+(def mouse-clicked? #(get-in % [:mouse :clicked?]))
 (defn key-codes-down
   [input]
   (map first (filter (fn [[_, down?]] down?) (input :key-down?))))
@@ -88,11 +91,28 @@
   [input]
   (swap! input assoc-in [:mouse :drag] (current-drag @input)))
 
+(defn store-mouse-is-clicked
+  [input window]
+  (on window
+      :mousedown
+      (partial swap! input assoc-in [:mouse :clicked?] true))
+  (on-read input (partial swap! input assoc-in [:mouse :clicked?] false)))
+
+(defn on-read
+  [input fn]
+  (swap! input assoc :read-fns (conj (@input :read-fns) fn)))
+
+(defn read
+  [input]
+  (doseq [read-fn (get @input :read-fns)]
+    (read-fn)))
+
 (defn input
   [canvas window]
   (let [input (create-input)]
     (on-tick #(store-drag input))
     (store-mouse-position input canvas)
+    (store-mouse-is-clicked input window)
     (store-mouse-is-down input canvas)
     (store-key-down input window)
 

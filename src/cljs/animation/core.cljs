@@ -94,7 +94,8 @@
 
   (let [state (atom _state)]
     (on-tick #(reset! state (step-state @input @state)))
-    (on-tick #(draw @state screen))))
+    (on-tick #(draw @state screen))
+    (on-tick #(input/read input))))
 
 (run
   (initial-state)
