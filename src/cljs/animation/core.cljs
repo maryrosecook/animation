@@ -37,7 +37,7 @@
   [state screen]
   (clear-screen screen (get-window-size js/window js/document))
   (doseq [point (get state :points)]
-    (.fillRect screen (get point :x) (get point :y) 5 5)))
+    (draw-circle screen point 2)))
 
 (defn set-canvas-size! [canvas {w :w h :h}]
   (set! (. canvas -width) w)
@@ -62,6 +62,13 @@
     (let [point (create-point (input/mouse-position input)
                               (point-group state))]
       (add-point state point))))
+
+(defn draw-circle
+  [screen center radius]
+  (.beginPath screen)
+  (.arc screen (center :x) (center :y) radius 0 (* 2 (.-PI js/Math)))
+  (.closePath screen)
+  (.fill screen))
 
 (defn keyboard-selected-mode
   [input]
