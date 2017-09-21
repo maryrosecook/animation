@@ -45,6 +45,7 @@
 
 (defn draw-mode? [state] (= :draw (get state :mode)))
 (defn move-mode? [state] (= :move (get state :mode)))
+(def point-group #(% :point-group))
 
 (defn draw-points
   [input state]
@@ -77,6 +78,11 @@
                                   point
                                   (drag-delta input)))))))
 
+(defn increment-dot-group-on-mouse-down
+  [input state]
+  (if (input/mouse-clicked? input)
+    (update state :point-group inc)))
+
 (defn default
   [fn value]
   (or (fn value) value))
@@ -86,7 +92,8 @@
   (->> state
        (default (partial set-mode input))
        (default (partial draw-points input))
-       (default (partial move-points input))))
+       (default (partial move-points input))
+       (default (partial increment-dot-group-on-mouse-down input))))
 
 (defn run
   [_state input screen]
