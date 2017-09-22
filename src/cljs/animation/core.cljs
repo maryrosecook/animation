@@ -130,11 +130,16 @@
          :frames
          (conj (state :frames) (create-frame (points state)))))
 
+(defn increment-current-frame-index
+  [state]
+  (update state :current-frame-index inc))
+
 (defn step-state
   [input state]
   (->> state
        (default (partial set-mode input))
        (default (partial add-frame))
+       (default (partial increment-current-frame-index))
        (default (partial create-points input))
        (default (partial move-points input))
        (default (partial increment-dot-group-on-mouse-down input))))
