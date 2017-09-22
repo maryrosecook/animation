@@ -17,14 +17,18 @@
 (defn draw-mode? [state] (= :draw (get state :mode)))
 (defn move-mode? [state] (= :move (get state :mode)))
 (def point-group #(% :point-group))
+(def frames #(% :frames))
 (def points #(-> % :frames last :points))
 (defn set-points
   [state points]
   (assoc-in state [:frames (dec (count (state :frames))) :points] points))
+(defn current-frame
+  [state]
+  (get (frames state) (state :current-frame-index)))
 
 (defn initial-state
   []
-  {:frames []
+  {:frames [(create-frame [])]
    :current-frame-index 0
    :mode :draw
    :point-group 0})
@@ -54,7 +58,7 @@
 (defn draw
   [state screen]
   (clear-screen screen (get-window-size js/window js/document))
-  (doseq [point (points state)]
+  (doseq [point ((current-frame state) :points)]
     (draw-circle screen point point-radius)))
 
 (defn set-canvas-size! [canvas {w :w h :h}]
@@ -94,6 +98,11 @@
                                     point
                                     (drag-delta input)))
                        (points state)))))
+
+(defn rewind-on-4-key
+  [input state]
+  (if (input/key-down? input 52)
+    (assoc state :current-frame-index 0)))
 
 (defn increment-dot-group-on-mouse-down
   [input state]
@@ -138,11 +147,12 @@
   [input state]
   (->> state
        (default (partial set-mode input))
+       (default (partial rewind-on-4-key input))
        (default (partial add-frame))
-       (default (partial increment-current-frame-index))
        (default (partial create-points input))
        (default (partial move-points input))
-       (default (partial increment-dot-group-on-mouse-down input))))
+       (default (partial increment-dot-group-on-mouse-down input))
+       (default (partial increment-current-frame-index))))
 
 (defn run
   [_state input screen]

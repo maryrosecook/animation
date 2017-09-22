@@ -58,6 +58,9 @@
 (defn key-codes-down
   [input]
   (map first (filter (fn [[_, down?]] down?) (input :key-down?))))
+(defn key-down?
+  [input key-code]
+  (get-in input [:key-down? key-code]))
 
 (defn store-mouse-position
   [input canvas]
