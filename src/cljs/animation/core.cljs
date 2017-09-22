@@ -117,10 +117,21 @@
   [fn value]
   (or (fn value) value))
 
+(defn create-frame
+  [points]
+  {:points points})
+
+(defn add-frame
+  [state]
+  (assoc state
+         :frames
+         (conj (state :frames) (create-frame (points state)))))
+
 (defn step-state
   [input state]
   (->> state
        (default (partial set-mode input))
+       (default (partial add-frame))
        (default (partial draw-points input))
        (default (partial move-points input))
        (default (partial increment-dot-group-on-mouse-down input))))
