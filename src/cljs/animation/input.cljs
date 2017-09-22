@@ -58,7 +58,7 @@
 (def keys-down #(get % :key-down?))
 (defn key-codes-down
   [input]
-  (map first (filter (fn [[_, down?]] down?) (input :key-down?))))
+  (map first (filter (fn [[_, down?]] down?) (keys-down input))))
 (defn key-down?
   [input key-code]
   (get (keys-down input) key-code))
