@@ -18,14 +18,13 @@
 
 (defn create-input
   []
-  (atom
-   {:mouse
-    {:position {:x 0 :y 0}
-     :down? false
-     :clicked? false
-     :drag {:previous nil :current nil}}
-    :keys {:down (hash-set)}
-    :read-fns []}))
+  {:mouse
+   {:position {:x 0 :y 0}
+    :down? false
+    :clicked? false
+    :drag {:previous nil :current nil}}
+   :keys {:down (hash-set)}
+   :read-fns []})
 
 (defn on
   [element event-type fn]
@@ -115,7 +114,7 @@
 
 (defn input
   [canvas window]
-  (let [input (create-input)]
+  (let [input (atom (create-input))]
     (on-tick #(store-drag input))
     (store-mouse-position input canvas)
     (store-mouse-is-clicked input window)
