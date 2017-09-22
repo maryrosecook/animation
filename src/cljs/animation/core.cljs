@@ -101,6 +101,20 @@
   (if (input/mouse-clicked? input)
     (update state :point-group inc)))
 
+(defn points-at-position
+  [points center radius]
+  (filter (partial geometry/point-in-circle? center radius) points))
+
+(defn select-points
+  [input state]
+  (if (input/mouse-clicked? input)
+    (let [points (points state)
+          mouse-position (input/mouse-position input)
+          clicked-point (first (points-at-position points
+                                                   mouse-position
+                                                   point-radius))]
+      (.log js/console (clj->js clicked-point)))))
+
 (defn default
   [fn value]
   (or (fn value) value))
