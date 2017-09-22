@@ -24,7 +24,7 @@
 
 (defn initial-state
   []
-  {:frames [{:points []}]
+  {:frames []
    :mode :draw
    :point-group 0})
 
