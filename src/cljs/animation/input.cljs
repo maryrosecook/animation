@@ -25,6 +25,7 @@
      :clicked? false
      :drag {:previous nil :current nil}}
     :key-down? {}
+    :keys {:down (hash-set)}
     :read-fns []}))
 
 (defn on
@@ -55,13 +56,17 @@
 (def mouse-position #(get-in % [:mouse :position]))
 (def mouse-down? #(get-in % [:mouse :down?]))
 (def mouse-clicked? #(get-in % [:mouse :clicked?]))
-(def keys-down #(get % :key-down?))
-(defn key-codes-down
-  [input]
-  (map first (filter (fn [[_, down?]] down?) (keys-down input))))
 (defn key-down?
   [input key-code]
-  (get (keys-down input) key-code))
+  (contains? (keys-down input) key-code))
+
+(defn keys-down
+  [input]
+  (get-in input [:keys :down]))
+
+(defn set-keys-down
+  [input keys-down]
+  (swap! input assoc-in [:keys :down] keys-down))
 
 (defn store-mouse-position
   [input canvas]
@@ -78,11 +83,11 @@
   (on window
       :keydown
       (fn [event]
-        (swap! input assoc-in [:key-down? (.-keyCode event)] true)))
+        (set-keys-down input (conj (keys-down @input) (.-keyCode event)))))
   (on window
       :keyup
       (fn [event]
-        (swap! input assoc-in [:key-down? (.-keyCode event)] false))))
+        (set-keys-down input (disj (keys-down @input) (.-keyCode event))))))
 
 (defn current-drag
   [input]

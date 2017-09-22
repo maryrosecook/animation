@@ -82,7 +82,7 @@
   (let [button-maps {49 :select
                      50 :draw
                      51 :move}]
-    (get button-maps (first (input/key-codes-down input)))))
+    (get button-maps (first (input/keys-down input)))))
 
 (defn set-mode
   [input state]
