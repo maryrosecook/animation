@@ -19,6 +19,7 @@
 (def point-group #(% :point-group))
 (def frames #(% :frames))
 (def points #(-> % :frames last :points))
+(def last-frame #(-> % :frames last))
 (defn set-points
   [state points]
   (assoc-in state [:frames (dec (count (state :frames))) :points] points))
@@ -137,7 +138,7 @@
   [state]
   (assoc state
          :frames
-         (conj (state :frames) (create-frame (points state)))))
+         (conj (state :frames) (last-frame state))))
 
 (defn increment-current-frame-index
   [state]
