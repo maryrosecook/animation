@@ -40,6 +40,13 @@
   {:w (or (.-innerWidth window) (.-clientWidth (.-body document)))
    :h (or (.-innerHeight window) (.-clientHeight (.-body document)))})
 
+(defn draw-circle
+  [screen center radius]
+  (.beginPath screen)
+  (.arc screen (center :x) (center :y) radius 0 (* 2 (.-PI js/Math)))
+  (.closePath screen)
+  (.fill screen))
+
 (defn draw
   [state screen]
   (clear-screen screen (get-window-size js/window js/document))
@@ -65,13 +72,6 @@
     (let [point (create-point (input/mouse-position input)
                               (point-group state))]
       (add-point state point))))
-
-(defn draw-circle
-  [screen center radius]
-  (.beginPath screen)
-  (.arc screen (center :x) (center :y) radius 0 (* 2 (.-PI js/Math)))
-  (.closePath screen)
-  (.fill screen))
 
 (defn keyboard-selected-mode
   [input]
