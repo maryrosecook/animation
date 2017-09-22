@@ -25,6 +25,7 @@
 (defn initial-state
   []
   {:frames []
+   :current-frame-index 0
    :mode :draw
    :point-group 0})
 
