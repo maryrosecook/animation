@@ -149,11 +149,11 @@
   (->> state
        (default (partial set-mode input))
        (default (partial rewind-on-4-key input))
-       (default (partial add-frame))
        (default (partial create-points input))
        (default (partial move-points input))
        (default (partial increment-dot-group-on-mouse-down input))
-       (default (partial increment-current-frame-index))))
+       (default (partial increment-current-frame-index))
+       (default (partial add-frame))))
 
 (defn run
   [_state input screen]
