@@ -17,8 +17,10 @@
 (defn draw-mode? [state] (= :draw (get state :mode)))
 (defn move-mode? [state] (= :move (get state :mode)))
 (def point-group #(% :point-group))
-(def points #(get-in % [:frames 0 :points]))
-(defn set-points [state points] (assoc-in state [:frames 0 :points] points))
+(def points #(-> % :frames last :points))
+(defn set-points
+  [state points]
+  (assoc-in state [:frames (dec (count (state :frames))) :points] points))
 
 (defn initial-state
   []
