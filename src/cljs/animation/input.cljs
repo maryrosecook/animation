@@ -59,11 +59,9 @@
 (defn key-down?
   [input key-code]
   (contains? (keys-down input) key-code))
-
 (defn keys-down
   [input]
   (get-in input [:keys :down]))
-
 (defn set-keys-down
   [input keys-down]
   (swap! input assoc-in [:keys :down] keys-down))
