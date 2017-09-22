@@ -7,7 +7,7 @@
             [animation.input :as input]))
 
 (enable-console-print!)
-;; (repl/connect "http://localhost:9000/repl")
+(repl/connect "http://localhost:9000/repl")
 
 (def canvas (dom/getElement "screen"))
 (def screen (.getContext canvas "2d"))
