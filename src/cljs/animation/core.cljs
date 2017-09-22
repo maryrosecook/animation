@@ -38,7 +38,7 @@
 (defn draw
   [state screen]
   (clear-screen screen (get-window-size js/window js/document))
-  (doseq [point (get state :points)]
+  (doseq [point (points state)]
     (draw-circle screen point point-radius)))
 
 (defn set-canvas-size! [canvas {w :w h :h}]
