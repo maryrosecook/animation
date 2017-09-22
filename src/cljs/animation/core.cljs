@@ -14,6 +14,11 @@
 
 (def point-radius 2)
 
+(defn draw-mode? [state] (= :draw (get state :mode)))
+(defn move-mode? [state] (= :move (get state :mode)))
+(def point-group #(% :point-group))
+(def points #(% :points))
+
 (defn initial-state
   []
   {:points []
@@ -44,11 +49,6 @@
 (defn set-canvas-size! [canvas {w :w h :h}]
   (set! (. canvas -width) w)
   (set! (. canvas -height) h))
-
-(defn draw-mode? [state] (= :draw (get state :mode)))
-(defn move-mode? [state] (= :move (get state :mode)))
-(def point-group #(% :point-group))
-(def points #(% :points))
 
 (defn create-point
   [position group]
