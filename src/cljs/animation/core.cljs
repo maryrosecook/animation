@@ -46,6 +46,7 @@
 (defn draw-mode? [state] (= :draw (get state :mode)))
 (defn move-mode? [state] (= :move (get state :mode)))
 (def point-group #(% :point-group))
+(def points #(% :points))
 
 (defn create-point
   [position group]
