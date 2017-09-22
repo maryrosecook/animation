@@ -99,10 +99,12 @@
   (if (input/mouse-clicked? input)
     (update state :point-group inc)))
 
+;; todo: finish
 (defn points-at-position
   [points center radius]
   (filter (partial geometry/point-in-circle? center radius) points))
 
+;; todo: finish
 (defn select-points
   [input state]
   (if (input/mouse-clicked? input)
