@@ -12,6 +12,8 @@
 (def canvas (dom/getElement "screen"))
 (def screen (.getContext canvas "2d"))
 
+(def point-radius 2)
+
 (defn initial-state
   []
   {:points []
@@ -37,7 +39,7 @@
   [state screen]
   (clear-screen screen (get-window-size js/window js/document))
   (doseq [point (get state :points)]
-    (draw-circle screen point 2)))
+    (draw-circle screen point point-radius)))
 
 (defn set-canvas-size! [canvas {w :w h :h}]
   (set! (. canvas -width) w)
