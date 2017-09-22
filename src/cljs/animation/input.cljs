@@ -24,7 +24,6 @@
      :down? false
      :clicked? false
      :drag {:previous nil :current nil}}
-    :key-down? {}
     :keys {:down (hash-set)}
     :read-fns []}))
 
