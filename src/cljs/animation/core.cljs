@@ -20,9 +20,9 @@
 (def point-group #(% :point-group))
 (def frames #(% :frames))
 (def last-frame #(-> % :frames last))
-(defn set-points
+(defn set-current-points
   [state points]
-  (assoc-in state [:frames (dec (count (state :frames))) :points] points))
+  (assoc-in state [:frames (current-frame-index state) :points] points))
 (defn current-frame
   [state]
   (get (frames state) (current-frame-index state)))
@@ -76,7 +76,8 @@
            (input/mouse-down? input))
     (let [point (create-point (input/mouse-position input)
                               (point-group state))]
-      (set-points state (conj ((current-frame state) :points) point)))))
+      (set-current-points state
+                          (conj ((current-frame state) :points) point)))))
 
 (defn keyboard-selected-mode
   [input]
@@ -94,11 +95,11 @@
   [input state]
   (if (and (input/mouse-down? input)
            (move-mode? state))
-    (set-points state (map
-                       (fn [point] (geometry/add-vectors
-                                    point
-                                    (drag-delta input)))
-                       ((current-frame state) :points)))))
+    (set-current-points state (map
+                               (fn [point] (geometry/add-vectors
+                                            point
+                                            (drag-delta input)))
+                               ((current-frame state) :points)))))
 
 (defn rewind-on-4-key
   [input state]
