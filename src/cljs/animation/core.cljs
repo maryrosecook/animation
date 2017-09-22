@@ -64,7 +64,7 @@
   [position group]
   (assoc position :group group))
 
-(defn draw-points
+(defn create-points
   [input state]
   (if (and (draw-mode? state)
            (input/mouse-down? input))
@@ -134,7 +134,7 @@
   (->> state
        (default (partial set-mode input))
        (default (partial add-frame))
-       (default (partial draw-points input))
+       (default (partial create-points input))
        (default (partial move-points input))
        (default (partial increment-dot-group-on-mouse-down input))))
 
