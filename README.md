@@ -3,7 +3,7 @@
 Use gestures to create visually primitive but expressive movies.
 
 ```
-To do
+MVP
 
 As a friendly person
 So I can share my drawings
@@ -18,8 +18,22 @@ So I can create more complex events
 I want to be able to move individual objects
 
 As an unskilled animator
-So I can depict complex events
-I want to be able to have multiple things happen simultaneously
+So I can create more complex events
+I want to be able to draw and move objects when replaying
+
+More
+
+As an unskilled animator
+So I can take a second to build an object
+I want to be able to stop time
+
+As an unskilled animator
+So I can express more movements
+I want to be able to rotate objects
+
+As an unskilled animator
+So I can express more movements
+I want to be able to scale objects
 
 Done
 
