@@ -159,6 +159,7 @@
 (defn run
   [_state input screen]
   (set-canvas-size! canvas (get-window-size js/window js/document))
+  (prevent-web-view-scrolling js/document)
 
   (let [state (atom _state)]
     (on-tick #(reset! state (step-state @input @state)))
