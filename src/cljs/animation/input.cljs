@@ -17,7 +17,8 @@
    :blur goog.events.EventType.BLUR})
 
 (def keyword->keycode
-  {:4 52})
+  {:4 52
+   :shift 16})
 
 (defn create-input
   []
