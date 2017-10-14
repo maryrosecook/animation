@@ -5,10 +5,6 @@ Use gestures to create visually primitive but expressive movies.
 ```
 MVP
 
-As a friendly person
-So I can share my drawings
-I want the app the work on mobile
-
 As an unskilled animator
 So I can build up objects quickly
 I want to be able to create an object from collections of dots
