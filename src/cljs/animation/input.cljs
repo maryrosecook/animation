@@ -96,6 +96,13 @@
       (fn [event]
         (set-keys-down input (disj (keys-down @input) (.-keyCode event))))))
 
+(defn store-keys-pressed
+  [input window]
+  (on window
+      :keypress
+      (fn [event]
+        (set-keys-pressed input (conj (keys-pressed @input) (.-keyCode event))))))
+
 (defn current-drag
   [input]
   (if (mouse-down? input)
@@ -131,5 +138,6 @@
     (store-mouse-is-clicked input window)
     (store-mouse-is-down input canvas)
     (store-key-down input window)
+    (store-keys-pressed input window)
 
     input))
