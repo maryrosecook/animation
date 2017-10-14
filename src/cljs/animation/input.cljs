@@ -28,7 +28,7 @@
     :clicked? false
     :drag {:previous nil :current nil}}
    :keys {:down (hash-set)
-          :pressed (hash-set)}
+          :pressed-state {}}
    :read-fns []})
 
 (defn on
@@ -67,13 +67,21 @@
   (get-in input [:keys :down]))
 (defn keys-pressed
   [input]
-  (get-in input [:keys :pressed]))
+  (->> (get-in input [:keys :pressed-state])
+       (filter (fn [[keycode state]] (= state :pressed)))
+       (map first)))
+(defn key-pressed-state
+  [input keycode]
+  (get-in input [:keys :pressed-state keycode]))
+(defn keys-pressed-state
+  [input keycode]
+  (get-in input [:keys :pressed-state]))
+(defn set-key-pressed-state
+  [input keycode state]
+  (swap! input assoc-in [:keys :pressed-state keycode] state))
 (defn set-keys-down
   [input keys-down]
   (swap! input assoc-in [:keys :down] keys-down))
-(defn set-keys-pressed
-  [input keys-pressed]
-  (swap! input assoc-in [:keys :pressed] keys-pressed))
 
 (defn store-mouse-position
   [input canvas]
@@ -96,12 +104,26 @@
       (fn [event]
         (set-keys-down input (disj (keys-down @input) (.-keyCode event))))))
 
-(defn store-keys-pressed
+(defn store-keys-pressed-states
   [input window]
   (on window
-      :keypress
+      :keydown
       (fn [event]
-        (set-keys-pressed input (conj (keys-pressed @input) (.-keyCode event))))))
+        (let [keycode (.-keyCode event)
+              key-state (key-pressed-state @input keycode)]
+          (if (= key-state nil)
+            (set-key-pressed-state input keycode :pressed)))))
+  (on-read input
+           (fn []
+             (doseq [keycode (keys-pressed @input)]
+               (set-key-pressed-state input keycode :waiting-for-up))))
+  (on window
+      :keyup
+      (fn [event]
+        (let [keycode (.-keyCode event)
+              key-state (key-pressed-state @input keycode)]
+          (if (= key-state :waiting-for-up)
+            (set-key-pressed-state input keycode nil))))))
 
 (defn current-drag
   [input]
@@ -138,6 +160,6 @@
     (store-mouse-is-clicked input window)
     (store-mouse-is-down input canvas)
     (store-keys-down input window)
-    (store-keys-pressed input window)
+    (store-keys-pressed-states input window)
 
     input))
