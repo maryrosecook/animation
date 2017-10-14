@@ -85,7 +85,7 @@
                [:mouse :position]
                (event->mouse-position event)))))
 
-(defn store-key-down
+(defn store-keys-down
   [input window]
   (on window
       :keydown
@@ -137,7 +137,7 @@
     (store-mouse-position input canvas)
     (store-mouse-is-clicked input window)
     (store-mouse-is-down input canvas)
-    (store-key-down input window)
+    (store-keys-down input window)
     (store-keys-pressed input window)
 
     input))
