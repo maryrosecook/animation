@@ -27,7 +27,8 @@
     :down? false
     :clicked? false
     :drag {:previous nil :current nil}}
-   :keys {:down (hash-set)}
+   :keys {:down (hash-set)
+          :pressed (hash-set)}
    :read-fns []})
 
 (defn on
@@ -64,9 +65,15 @@
 (defn keys-down
   [input]
   (get-in input [:keys :down]))
+(defn keys-pressed
+  [input]
+  (get-in input [:keys :pressed]))
 (defn set-keys-down
   [input keys-down]
   (swap! input assoc-in [:keys :down] keys-down))
+(defn set-keys-pressed
+  [input keys-pressed]
+  (swap! input assoc-in [:keys :pressed] keys-pressed))
 
 (defn store-mouse-position
   [input canvas]
