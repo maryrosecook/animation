@@ -32,7 +32,8 @@
   {:frames [(create-frame [])]
    :current-frame-index 0
    :mode nil
-   :point-group 0})
+   :point-group 0
+   :selected-group 0})
 
 (defn drag-delta
   [input]
