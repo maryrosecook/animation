@@ -31,7 +31,7 @@
   []
   {:frames [(create-frame [])]
    :current-frame-index 0
-   :mode :draw
+   :mode nil
    :point-group 0})
 
 (defn drag-delta
@@ -60,7 +60,7 @@
 (defn draw
   [state screen]
   (clear-screen screen (get-window-size js/window js/document))
-  (let [[first-group-points rest] (partition-by (fn [p] (= (p :group) 0))
+  (let [[first-group-points rest] (partition-by (fn [p] (= (p :group) 1))
                                                 ((current-frame state) :points))]
   (doseq [point first-group-points]
     (fill-circle screen point point-radius "red"))
@@ -87,14 +87,13 @@
 (defn keyboard-selected-mode
   [input]
   (let [button-maps {49 :select
-                     50 :draw
+                     16 :draw
                      51 :move}]
     (get button-maps (first (input/keys-down input)))))
 
 (defn set-mode
   [input state]
-  (if-let [new-mode (keyboard-selected-mode input)]
-    (assoc state :mode new-mode)))
+  (assoc state :mode (keyboard-selected-mode input)))
 
 (defn move-points
   [input state]
