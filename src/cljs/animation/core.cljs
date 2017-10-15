@@ -49,7 +49,7 @@
   {:w (or (.-innerWidth window) (.-clientWidth (.-body document)))
    :h (or (.-innerHeight window) (.-clientHeight (.-body document)))})
 
-(defn draw-circle
+(defn fill-circle
   [screen center radius]
   (.beginPath screen)
   (.arc screen (center :x) (center :y) radius 0 (* 2 (.-PI js/Math)))
@@ -60,7 +60,7 @@
   [state screen]
   (clear-screen screen (get-window-size js/window js/document))
   (doseq [point ((current-frame state) :points)]
-    (draw-circle screen point point-radius)))
+    (fill-circle screen point point-radius)))
 
 (defn set-canvas-size! [canvas {w :w h :h}]
   (set! (. canvas -width) w)
