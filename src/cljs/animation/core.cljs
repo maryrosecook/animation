@@ -108,7 +108,7 @@
 
 (defn increment-dot-group-on-mouse-down
   [input state]
-  (if (input/mouse-clicked? input)
+  (if (input/key-pressed? input 16)
     (update state :point-group inc)))
 
 ;; todo: finish

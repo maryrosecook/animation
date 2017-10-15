@@ -65,6 +65,9 @@
 (defn keys-down
   [input]
   (get-in input [:keys :down]))
+(defn key-pressed?
+  [input keycode]
+  (= (key-pressed-state input keycode) :pressed))
 (defn keys-pressed
   [input]
   (->> (get-in input [:keys :pressed-state])
