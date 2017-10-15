@@ -60,8 +60,12 @@
 (defn draw
   [state screen]
   (clear-screen screen (get-window-size js/window js/document))
-  (doseq [point ((current-frame state) :points)]
-    (fill-circle screen point point-radius "red")))
+  (let [[first-group-points rest] (partition-by (fn [p] (= (p :group) 0))
+                                                ((current-frame state) :points))]
+  (doseq [point first-group-points]
+    (fill-circle screen point point-radius "red"))
+  (doseq [point rest]
+    (fill-circle screen point point-radius "black"))))
 
 (defn set-canvas-size! [canvas {w :w h :h}]
   (set! (. canvas -width) w)
