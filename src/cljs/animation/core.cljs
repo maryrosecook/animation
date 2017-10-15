@@ -50,7 +50,8 @@
    :h (or (.-innerHeight window) (.-clientHeight (.-body document)))})
 
 (defn fill-circle
-  [screen center radius]
+  [screen center radius color]
+  (set! (. screen -fillStyle) color)
   (.beginPath screen)
   (.arc screen (center :x) (center :y) radius 0 (* 2 (.-PI js/Math)))
   (.closePath screen)
@@ -60,7 +61,7 @@
   [state screen]
   (clear-screen screen (get-window-size js/window js/document))
   (doseq [point ((current-frame state) :points)]
-    (fill-circle screen point point-radius)))
+    (fill-circle screen point point-radius "red")))
 
 (defn set-canvas-size! [canvas {w :w h :h}]
   (set! (. canvas -width) w)
