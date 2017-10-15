@@ -16,7 +16,7 @@
    :focus goog.events.EventType.FOCUS
    :blur goog.events.EventType.BLUR})
 
-(def keyword->keycode
+(def key->keycode
   {:4 52
    :shift 16})
 
@@ -60,8 +60,8 @@
 (def mouse-down? #(get-in % [:mouse :down?]))
 (def mouse-clicked? #(get-in % [:mouse :clicked?]))
 (defn key-down?
-  [input key-keyword]
-  (contains? (keys-down input) (keyword->keycode key-keyword)))
+  [input keycode]
+  (contains? (keys-down input) keycode))
 (defn keys-down
   [input]
   (get-in input [:keys :down]))

@@ -103,7 +103,7 @@
 
 (defn rewind-on-4-key
   [input state]
-  (if (input/key-down? input :4)
+  (if (input/key-down? input (input/key->keycode :4))
     (assoc state :current-frame-index 0)))
 
 (defn increment-dot-group-on-mouse-down
