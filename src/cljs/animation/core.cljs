@@ -110,7 +110,7 @@
   (if (input/key-down? input (input/key->keycode :4))
     (assoc state :current-frame-index 0)))
 
-(defn increment-dot-group-on-mouse-down
+(defn increment-dot-group-on-shift
   [input state]
   (if (input/key-pressed? input (input/key->keycode :shift))
     (update state :point-group inc)))
