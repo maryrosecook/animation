@@ -59,16 +59,20 @@
   (.closePath screen)
   (.fill screen))
 
+(defn point-color
+  [point selected-group]
+  (if (= (point :group) selected-group)
+    "red"
+    "black"))
+
 (defn draw
   [state screen]
   (clear-screen screen (get-window-size js/window js/document))
-  (let [selected-group' (selected-group state)
-        [first-group-points rest] (partition-by (fn [p] (= (p :group) selected-group'))
-                                                ((current-frame state) :points))]
-  (doseq [point first-group-points]
-    (fill-circle screen point point-radius "red"))
-  (doseq [point rest]
-    (fill-circle screen point point-radius "black"))))
+  (doseq [point ((current-frame state) :points)]
+    (fill-circle screen
+                 point
+                 point-radius
+                 (point-color point (selected-group state)))))
 
 (defn set-canvas-size! [canvas {w :w h :h}]
   (set! (. canvas -width) w)
