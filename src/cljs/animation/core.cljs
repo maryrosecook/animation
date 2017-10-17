@@ -18,6 +18,7 @@
 (defn move-mode? [state] (= :move (get state :mode)))
 (def current-frame-index #(% :current-frame-index))
 (def point-group #(% :point-group))
+(def selected-group #(% :selected-group))
 (def frames #(% :frames))
 (def last-frame #(-> % :frames last))
 (defn set-current-points
@@ -33,7 +34,7 @@
    :current-frame-index 0
    :mode nil
    :point-group 0
-   :selected-group 0})
+   :selected-group 1})
 
 (defn drag-delta
   [input]
@@ -61,7 +62,8 @@
 (defn draw
   [state screen]
   (clear-screen screen (get-window-size js/window js/document))
-  (let [[first-group-points rest] (partition-by (fn [p] (= (p :group) 1))
+  (let [selected-group' (selected-group state)
+        [first-group-points rest] (partition-by (fn [p] (= (p :group) selected-group'))
                                                 ((current-frame state) :points))]
   (doseq [point first-group-points]
     (fill-circle screen point point-radius "red"))
