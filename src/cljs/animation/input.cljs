@@ -18,7 +18,8 @@
 
 (def key->keycode
   {:4 52
-   :shift 16})
+   :shift 16
+   :tab 9})
 
 (defn create-input
   []
@@ -101,7 +102,8 @@
   (on window
       :keydown
       (fn [event]
-        (set-keys-down input (conj (keys-down @input) (.-keyCode event)))))
+        (set-keys-down input (conj (keys-down @input) (.-keyCode event)))
+        (.preventDefault event)))
   (on window
       :keyup
       (fn [event]

@@ -156,6 +156,19 @@
   [state]
   (update state :current-frame-index inc))
 
+(defn cycle-selected-group
+  [state]
+  (let [max-group (point-group state)
+        next-group (inc (selected-group state))]
+    (assoc state
+           :selected-group
+           (if (<= next-group max-group) next-group 1))))
+
+(defn cycle-selected-group-on-tab
+  [input state]
+  (if (input/key-pressed? input (input/key->keycode :tab))
+    (cycle-selected-group state)))
+
 (defn step-state
   [input state]
   (->> state
@@ -164,6 +177,7 @@
        (default (partial create-points input))
        (default (partial move-points input))
        (default (partial increment-dot-group-on-shift input))
+       (default (partial cycle-selected-group-on-tab input))
        (default (partial increment-current-frame-index))
        (default (partial add-frame))))
 
