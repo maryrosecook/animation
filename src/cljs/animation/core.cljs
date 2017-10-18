@@ -106,11 +106,13 @@
   [input state]
   (if (and (input/mouse-down? input)
            (move-mode? state))
-    (set-current-points state (map
-                               (fn [point] (geometry/add-vectors
-                                            point
-                                            (drag-delta input)))
-                               ((current-frame state) :points)))))
+    (let [drag-delta' (drag-delta input)]
+      (set-current-points state (map
+                                 (fn [point]
+                                   (merge point (geometry/add-vectors
+                                                 point
+                                                 drag-delta')))
+                                 ((current-frame state) :points))))))
 
 (defn rewind-on-4-key
   [input state]
