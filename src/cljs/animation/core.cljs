@@ -102,17 +102,26 @@
   [input state]
   (assoc state :mode (keyboard-selected-mode input)))
 
+(defn points-selected-unselected
+  [points selected-group]
+  (let [{selected true unselected false}
+          (group-by (fn [point] (= (point :group) selected-group)) points)]
+    {:selected selected :unselected unselected}))
+
 (defn move-points
   [input state]
   (if (and (input/mouse-down? input)
            (move-mode? state))
-    (let [drag-delta' (drag-delta input)]
-      (set-current-points state (map
-                                 (fn [point]
-                                   (merge point (geometry/add-vectors
-                                                 point
-                                                 drag-delta')))
-                                 ((current-frame state) :points))))))
+    (let [drag-delta' (drag-delta input)
+          points ((current-frame state) :points)
+          {selected :selected unselected :unselected}
+          (points-selected-unselected points (selected-group state))
+          moved-points (map (fn [point]
+                              (merge point (geometry/add-vectors
+                                            point
+                                            drag-delta')))
+                            selected)]
+      (set-current-points state (concat moved-points unselected)))))
 
 (defn rewind-on-4-key
   [input state]
