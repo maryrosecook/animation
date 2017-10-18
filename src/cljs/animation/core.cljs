@@ -17,6 +17,7 @@
 (defn draw-mode? [state] (= :draw (get state :mode)))
 (defn move-mode? [state] (= :move (get state :mode)))
 (def current-frame-index #(% :current-frame-index))
+(def playing? #(% :playing?))
 (def point-group #(% :point-group))
 (def selected-group #(% :selected-group))
 (def frames #(% :frames))
@@ -34,7 +35,8 @@
    :current-frame-index 0
    :mode nil
    :point-group 0
-   :selected-group 1})
+   :selected-group 1
+   :playing? true})
 
 (defn drag-delta
   [input]
@@ -157,15 +159,21 @@
   [points]
   {:points points})
 
+(defn at-last-frame?
+  [state]
+  (= (current-frame-index state) (count (frames state))))
+
 (defn add-frame
   [state]
-  (assoc state
-         :frames
-         (conj (state :frames) (last-frame state))))
+  (if (at-last-frame? state)
+    (assoc state
+           :frames
+           (conj (state :frames) (last-frame state)))))
 
 (defn increment-current-frame-index
   [state]
-  (update state :current-frame-index inc))
+  (if (playing? state)
+    (update state :current-frame-index inc)))
 
 (defn cycle-selected-group
   [state]
@@ -180,6 +188,15 @@
   (if (input/key-pressed? input (input/key->keycode :tab))
     (cycle-selected-group state)))
 
+(defn toggle-playing-on-space
+  [input state]
+  (if (input/key-pressed? input (input/key->keycode :space))
+    (toggle-playing state)))
+
+(defn toggle-playing
+  [state]
+  (update state :playing? not))
+
 (defn step-state
   [input state]
   (->> state
@@ -189,6 +206,7 @@
        (default (partial move-points input))
        (default (partial increment-dot-group-on-shift input))
        (default (partial cycle-selected-group-on-tab input))
+       (default (partial toggle-playing-on-space input))
        (default (partial increment-current-frame-index))
        (default (partial add-frame))))
 

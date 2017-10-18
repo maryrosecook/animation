@@ -19,7 +19,8 @@
 (def key->keycode
   {:4 52
    :shift 16
-   :tab 9})
+   :tab 9
+   :space 32})
 
 (defn create-input
   []
