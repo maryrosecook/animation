@@ -33,6 +33,7 @@
   []
   {:frames [(create-frame [])]
    :current-frame-index 0
+   :next-point-id 0
    :mode nil
    :point-group 0
    :selected-group 1
@@ -81,17 +82,21 @@
   (set! (. canvas -height) h))
 
 (defn create-point
-  [position group]
-  (assoc position :group group))
+  [id position group]
+  (merge position {:id id :group group}))
 
 (defn create-points
   [input state]
   (if (and (draw-mode? state)
            (input/mouse-down? input))
-    (let [point (create-point (input/mouse-position input)
-                              (point-group state))]
-      (set-current-points state
-                          (conj ((current-frame state) :points) point)))))
+    (let [id (state :next-point-id)
+          point (create-point id
+                              (input/mouse-position input)
+                              (point-group state))
+          points (conj ((current-frame state) :points) point)]
+      (-> state
+          (update :next-point-id inc)
+          (set-current-points points)))))
 
 (defn keyboard-selected-mode
   [input]
