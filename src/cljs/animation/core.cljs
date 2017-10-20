@@ -1,6 +1,7 @@
 (ns animation.core
   (:require [goog.dom :as dom]
             [goog.events :as events]
+            [clojure.set :as set]
             [clojure.browser.repl :as repl]
             [animation.geometry :as geometry]
             [animation.tick :refer [on-tick]]
@@ -21,13 +22,13 @@
 (def point-group #(% :point-group))
 (def selected-group #(% :selected-group))
 (def frames #(% :frames))
+(defn frame [state i] (get (frames state) i))
 (def last-frame #(-> % :frames last))
 (defn set-current-points
   [state points]
   (assoc-in state [:frames (current-frame-index state) :points] points))
-(defn current-frame
-  [state]
-  (get (frames state) (current-frame-index state)))
+(def current-frame #(frame % (current-frame-index %)))
+(def next-frame #(frame % (inc (current-frame-index %))))
 
 (defn initial-state
   []
@@ -166,14 +167,31 @@
 
 (defn at-last-frame?
   [state]
-  (= (current-frame-index state) (count (frames state))))
+  (= (current-frame-index state) (dec (count (frames state)))))
 
 (defn add-frame
   [state]
   (if (at-last-frame? state)
     (assoc state
            :frames
-           (conj (state :frames) (last-frame state)))))
+           (conj (state :frames) (create-frame [])))))
+
+(defn replace-next-frame
+  [state frame]
+  (let [next-frame-id (inc (current-frame-index state))]
+    (assoc-in state [:frames next-frame-id] frame)))
+
+(defn merge-frames
+  [{from-points :points} {to-points :points :as to}]
+  (let [points (vec (set/union (set from-points) (set to-points)))]
+    (assoc to :points points)))
+
+(defn merge-current-frame-into-next
+  [state]
+  (let [current-frame' (current-frame state)
+        next-frame' (next-frame state)
+        merged-frame (merge-frames current-frame' next-frame')]
+    (replace-next-frame state merged-frame)))
 
 (defn increment-current-frame-index
   [state]
@@ -212,8 +230,9 @@
        (default (partial increment-dot-group-on-shift input))
        (default (partial cycle-selected-group-on-tab input))
        (default (partial toggle-playing-on-space input))
-       (default (partial increment-current-frame-index))
-       (default (partial add-frame))))
+       (default (partial add-frame))
+       (default (partial merge-current-frame-into-next))
+       (default (partial increment-current-frame-index))))
 
 (defn run
   [_state input screen]
