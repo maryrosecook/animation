@@ -169,7 +169,7 @@
   [state]
   (= (current-frame-index state) (dec (count (frames state)))))
 
-(defn add-frame
+(defn add-frame-if-at-animation-end
   [state]
   (if (at-last-frame? state)
     (assoc state
@@ -230,7 +230,7 @@
        (default (partial increment-dot-group-on-shift input))
        (default (partial cycle-selected-group-on-tab input))
        (default (partial toggle-playing-on-space input))
-       (default (partial add-frame))
+       (default (partial add-frame-if-at-animation-end))
        (default (partial merge-current-frame-into-next))
        (default (partial increment-current-frame-index))))
 
