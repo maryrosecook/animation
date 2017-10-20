@@ -123,7 +123,7 @@
     (let [drag-delta' (drag-delta input)
           points ((current-frame state) :points)
           {selected :selected unselected :unselected}
-          (points-selected-unselected points (selected-group state))
+            (points-selected-unselected points (selected-group state))
           moved-points (map (fn [point]
                               (merge point (geometry/add-vectors
                                             point
@@ -142,20 +142,19 @@
     (update state :point-group inc)))
 
 ;; todo: finish
-(defn points-at-position
-  [points center radius]
-  (filter (partial geometry/point-in-circle? center radius) points))
+;; (defn points-at-position
+;;   [points center radius]
+;;   (filter (partial geometry/point-in-circle? center radius) points))
 
 ;; todo: finish
-(defn select-points
-  [input state]
-  (if (input/mouse-clicked? input)
-    (let [points ((current-frame state) :points)
-          mouse-position (input/mouse-position input)
-          clicked-point (first (points-at-position points
-                                                   mouse-position
-                                                   point-radius))]
-      (.log js/console (clj->js clicked-point)))))
+;; (defn select-points
+;;   [input state]
+;;   (if (input/mouse-clicked? input)
+;;     (let [points ((current-frame state) :points)
+;;           mouse-position (input/mouse-position input)
+;;           clicked-point (first (points-at-position points
+;;                                                    mouse-position
+;;                                                    point-radius))]
 
 (defn default
   [fn value]
@@ -182,9 +181,11 @@
     (assoc-in state [:frames next-frame-id] frame)))
 
 (defn merge-frames
-  [{from-points :points} {to-points :points :as to}]
-  (let [points (vec (set/union (set from-points) (set to-points)))]
-    (assoc to :points points)))
+  [{current-points :points} {next-points :points :as next}]
+  (let [current-point-ids (set (map :id current-points))
+        points-to-add (filter #(not (contains? current-point-ids (:id %)))
+                              next-points)]
+    (assoc to :points (concat current-points points-to-add))))
 
 (defn merge-current-frame-into-next
   [state]
