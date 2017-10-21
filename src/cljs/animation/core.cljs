@@ -91,7 +91,7 @@
 
 (defn create-point
   [id position group]
-  (merge position {:id id :group group}))
+  (merge position {:id id :group group :v 0}))
 
 (defn create-points
   [input state]
