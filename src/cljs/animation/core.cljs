@@ -91,7 +91,7 @@
 
 (defn create-point
   [id position group]
-  (merge position {:id id :group group :v 0}))
+  (merge position {:id id :group group :version 0}))
 
 (defn create-points
   [input state]
@@ -132,9 +132,11 @@
           {selected :selected unselected :unselected}
             (points-selected-unselected points (selected-group state))
           moved-points (map (fn [point]
-                              (merge point (geometry/add-vectors
-                                            point
-                                            drag-delta')))
+                              (merge point
+                                     (geometry/add-vectors
+                                      point
+                                      drag-delta')
+                                     {:version (inc (:version point))}))
                             selected)]
       (set-current-points state (concat moved-points unselected)))))
 
