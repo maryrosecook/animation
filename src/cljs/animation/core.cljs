@@ -189,12 +189,30 @@
   (let [next-frame-id (inc (current-frame-index state))]
     (assoc-in state [:frames next-frame-id] frame)))
 
+(defn points-lookup
+  [points]
+  (reduce (fn [lookup {id :id :as p}] (assoc lookup id p))
+          {}
+          points))
+
+(defn merge-points
+  [current-points next-points]
+  (let [current-id->point (points-lookup current-points)]
+    (->> next-points
+         (reduce (fn [id->point {id :id version :version :as point}]
+                   (let [point-exists? (contains? id->point id)
+                         replace? (and point-exists?
+                                       (< (get-in id->point [id :version])
+                                          version))]
+                     (if (or replace? (not point-exists?))
+                       (assoc id->point id point)
+                       id->point)))
+                 current-id->point)
+         vals)))
+
 (defn merge-frames
   [{current-points :points} {next-points :points :as next}]
-  (let [current-point-ids (set (map :id current-points))
-        points-to-add (filter #(not (contains? current-point-ids (:id %)))
-                              next-points)]
-    (assoc to :points (concat current-points points-to-add))))
+  (assoc to :points (merge-points current-points next-points)))
 
 (defn merge-current-frame-into-next
   [state]
