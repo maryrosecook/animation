@@ -248,6 +248,12 @@
   [state]
   (update state :playing? not))
 
+(defn setup-layout
+  [window document]
+  (let [window-size (get-window-size window document)
+        canvas-size {:w (:w window-size) :h (- (:h window-size) 40)}]
+  (set-canvas-size! canvas canvas-size)))
+
 (defn step-state
   [input state]
   (->> state
@@ -264,7 +270,7 @@
 
 (defn run
   [state input screen]
-  (set-canvas-size! canvas (get-window-size js/window js/document))
+  (setup-layout js/window js/document)
   (on-tick #(reset! state (step-state @input @state)))
   (on-tick #(draw @state screen))
   (on-tick #(input/read input)))
