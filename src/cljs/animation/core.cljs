@@ -263,15 +263,15 @@
        (default (partial increment-current-frame-index))))
 
 (defn run
-  [_state input screen]
+  [state input screen]
   (set-canvas-size! canvas (get-window-size js/window js/document))
+  (on-tick #(reset! state (step-state @input @state)))
+  (on-tick #(draw @state screen))
+  (on-tick #(input/read input)))
 
-  (let [state (atom _state)]
-    (on-tick #(reset! state (step-state @input @state)))
-    (on-tick #(draw @state screen))
-    (on-tick #(input/read input))))
+(def state (atom (initial-state)))
 
 (run
-  (initial-state)
+  state
   (input/input canvas js/window)
   screen)
