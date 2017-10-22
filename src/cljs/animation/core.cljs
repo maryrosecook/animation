@@ -251,7 +251,7 @@
 (defn setup-layout
   [window document]
   (let [window-size (get-window-size window document)
-        canvas-size {:w (:w window-size) :h (- (:h window-size) 40)}]
+        canvas-size {:w (:w window-size) :h (- (:h window-size) 100)}]
   (set-canvas-size! canvas canvas-size)))
 
 (defn step-state
