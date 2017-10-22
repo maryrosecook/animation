@@ -69,16 +69,16 @@
     "red"
     "black"))
 
-(defn draw-ui
+(defn draw-status
   [screen state]
-  (let [playing-status (if (:playing? state) "playing" "stopped")]
-    (set! (. screen -fillStyle) "black")
-    (.fillText screen playing-status 10 10)))
+  (let [playing-status-color (if (:playing? state) "#0f0" "#f00")]
+    (set! (. screen -fillStyle) playing-status-color)
+    (.fillRect screen 0 0 4000 10)))
 
 (defn draw
   [state screen]
   (clear-screen screen (get-window-size js/window js/document))
-  (draw-ui screen state)
+  (draw-status screen state)
   (doseq [point ((current-frame state) :points)]
     (fill-circle screen
                  point
