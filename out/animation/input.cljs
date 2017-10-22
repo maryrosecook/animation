@@ -45,7 +45,7 @@
 
 (defn event->mouse-position
   [event]
-  (let [{x "clientX" y "clientY"} (dom-object->map event)]
+  (let [{x "offsetX" y "offsetY"} (dom-object->map event)]
     {:x x :y y}))
 
 (defn store-mouse-is-down
