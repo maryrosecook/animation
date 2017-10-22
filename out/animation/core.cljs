@@ -66,7 +66,7 @@
 (defn point-color
   [point selected-group]
   (if (= (point :group) selected-group)
-    "red"
+    "#f90"
     "black"))
 
 (defn draw-status
