@@ -2,6 +2,8 @@
 
 Use gestures to create visually primitive but expressive movies.
 
+![](./demo.gif)
+
 ```
 MVP
 
