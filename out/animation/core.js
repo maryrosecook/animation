@@ -19,35 +19,35 @@ return cljs.core._EQ_.call(null,new cljs.core.Keyword(null,"draw","draw",1358331
 animation.core.move_mode_QMARK_ = (function animation$core$move_mode_QMARK_(state){
 return cljs.core._EQ_.call(null,new cljs.core.Keyword(null,"move","move",-2110884309),cljs.core.get.call(null,state,new cljs.core.Keyword(null,"mode","mode",654403691)));
 });
-animation.core.current_frame_index = (function animation$core$current_frame_index(p1__13667_SHARP_){
-return p1__13667_SHARP_.call(null,new cljs.core.Keyword(null,"current-frame-index","current-frame-index",-2126953732));
+animation.core.current_frame_index = (function animation$core$current_frame_index(p1__14632_SHARP_){
+return p1__14632_SHARP_.call(null,new cljs.core.Keyword(null,"current-frame-index","current-frame-index",-2126953732));
 });
-animation.core.playing_QMARK_ = (function animation$core$playing_QMARK_(p1__13668_SHARP_){
-return p1__13668_SHARP_.call(null,new cljs.core.Keyword(null,"playing?","playing?",-1884542863));
+animation.core.playing_QMARK_ = (function animation$core$playing_QMARK_(p1__14633_SHARP_){
+return p1__14633_SHARP_.call(null,new cljs.core.Keyword(null,"playing?","playing?",-1884542863));
 });
-animation.core.point_group = (function animation$core$point_group(p1__13669_SHARP_){
-return p1__13669_SHARP_.call(null,new cljs.core.Keyword(null,"point-group","point-group",414883798));
+animation.core.point_group = (function animation$core$point_group(p1__14634_SHARP_){
+return p1__14634_SHARP_.call(null,new cljs.core.Keyword(null,"point-group","point-group",414883798));
 });
-animation.core.selected_group = (function animation$core$selected_group(p1__13670_SHARP_){
-return p1__13670_SHARP_.call(null,new cljs.core.Keyword(null,"selected-group","selected-group",669136664));
+animation.core.selected_group = (function animation$core$selected_group(p1__14635_SHARP_){
+return p1__14635_SHARP_.call(null,new cljs.core.Keyword(null,"selected-group","selected-group",669136664));
 });
-animation.core.frames = (function animation$core$frames(p1__13671_SHARP_){
-return p1__13671_SHARP_.call(null,new cljs.core.Keyword(null,"frames","frames",1765687497));
+animation.core.frames = (function animation$core$frames(p1__14636_SHARP_){
+return p1__14636_SHARP_.call(null,new cljs.core.Keyword(null,"frames","frames",1765687497));
 });
 animation.core.frame = (function animation$core$frame(state,i){
 return cljs.core.get.call(null,animation.core.frames.call(null,state),i);
 });
-animation.core.last_frame = (function animation$core$last_frame(p1__13672_SHARP_){
-return cljs.core.last.call(null,new cljs.core.Keyword(null,"frames","frames",1765687497).cljs$core$IFn$_invoke$arity$1(p1__13672_SHARP_));
+animation.core.last_frame = (function animation$core$last_frame(p1__14637_SHARP_){
+return cljs.core.last.call(null,new cljs.core.Keyword(null,"frames","frames",1765687497).cljs$core$IFn$_invoke$arity$1(p1__14637_SHARP_));
 });
 animation.core.set_current_points = (function animation$core$set_current_points(state,points){
 return cljs.core.assoc_in.call(null,state,new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"frames","frames",1765687497),animation.core.current_frame_index.call(null,state),new cljs.core.Keyword(null,"points","points",-1486596883)], null),points);
 });
-animation.core.current_frame = (function animation$core$current_frame(p1__13673_SHARP_){
-return animation.core.frame.call(null,p1__13673_SHARP_,animation.core.current_frame_index.call(null,p1__13673_SHARP_));
+animation.core.current_frame = (function animation$core$current_frame(p1__14638_SHARP_){
+return animation.core.frame.call(null,p1__14638_SHARP_,animation.core.current_frame_index.call(null,p1__14638_SHARP_));
 });
-animation.core.next_frame = (function animation$core$next_frame(p1__13674_SHARP_){
-return animation.core.frame.call(null,p1__13674_SHARP_,(animation.core.current_frame_index.call(null,p1__13674_SHARP_) + (1)));
+animation.core.next_frame = (function animation$core$next_frame(p1__14639_SHARP_){
+return animation.core.frame.call(null,p1__14639_SHARP_,(animation.core.current_frame_index.call(null,p1__14639_SHARP_) + (1)));
 });
 animation.core.initial_state = (function animation$core$initial_state(){
 return new cljs.core.PersistentArrayMap(null, 7, [new cljs.core.Keyword(null,"frames","frames",1765687497),new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [animation.core.create_frame.call(null,cljs.core.PersistentVector.EMPTY)], null),new cljs.core.Keyword(null,"current-frame-index","current-frame-index",-2126953732),(0),new cljs.core.Keyword(null,"next-point-id","next-point-id",-613512213),(0),new cljs.core.Keyword(null,"mode","mode",654403691),null,new cljs.core.Keyword(null,"point-group","point-group",414883798),(0),new cljs.core.Keyword(null,"selected-group","selected-group",669136664),(1),new cljs.core.Keyword(null,"playing?","playing?",-1884542863),true], null);
@@ -107,51 +107,51 @@ animation.core.clear_screen.call(null,screen,animation.core.get_window_size.call
 
 animation.core.draw_ui.call(null,screen,state);
 
-var seq__13675 = cljs.core.seq.call(null,animation.core.current_frame.call(null,state).call(null,new cljs.core.Keyword(null,"points","points",-1486596883)));
-var chunk__13676 = null;
-var count__13677 = (0);
-var i__13678 = (0);
+var seq__14640 = cljs.core.seq.call(null,animation.core.current_frame.call(null,state).call(null,new cljs.core.Keyword(null,"points","points",-1486596883)));
+var chunk__14641 = null;
+var count__14642 = (0);
+var i__14643 = (0);
 while(true){
-if((i__13678 < count__13677)){
-var point = cljs.core._nth.call(null,chunk__13676,i__13678);
+if((i__14643 < count__14642)){
+var point = cljs.core._nth.call(null,chunk__14641,i__14643);
 animation.core.fill_circle.call(null,screen,point,animation.core.point_radius,animation.core.point_color.call(null,point,animation.core.selected_group.call(null,state)));
 
-var G__13679 = seq__13675;
-var G__13680 = chunk__13676;
-var G__13681 = count__13677;
-var G__13682 = (i__13678 + (1));
-seq__13675 = G__13679;
-chunk__13676 = G__13680;
-count__13677 = G__13681;
-i__13678 = G__13682;
+var G__14644 = seq__14640;
+var G__14645 = chunk__14641;
+var G__14646 = count__14642;
+var G__14647 = (i__14643 + (1));
+seq__14640 = G__14644;
+chunk__14641 = G__14645;
+count__14642 = G__14646;
+i__14643 = G__14647;
 continue;
 } else {
-var temp__4657__auto__ = cljs.core.seq.call(null,seq__13675);
+var temp__4657__auto__ = cljs.core.seq.call(null,seq__14640);
 if(temp__4657__auto__){
-var seq__13675__$1 = temp__4657__auto__;
-if(cljs.core.chunked_seq_QMARK_.call(null,seq__13675__$1)){
-var c__11683__auto__ = cljs.core.chunk_first.call(null,seq__13675__$1);
-var G__13683 = cljs.core.chunk_rest.call(null,seq__13675__$1);
-var G__13684 = c__11683__auto__;
-var G__13685 = cljs.core.count.call(null,c__11683__auto__);
-var G__13686 = (0);
-seq__13675 = G__13683;
-chunk__13676 = G__13684;
-count__13677 = G__13685;
-i__13678 = G__13686;
+var seq__14640__$1 = temp__4657__auto__;
+if(cljs.core.chunked_seq_QMARK_.call(null,seq__14640__$1)){
+var c__11683__auto__ = cljs.core.chunk_first.call(null,seq__14640__$1);
+var G__14648 = cljs.core.chunk_rest.call(null,seq__14640__$1);
+var G__14649 = c__11683__auto__;
+var G__14650 = cljs.core.count.call(null,c__11683__auto__);
+var G__14651 = (0);
+seq__14640 = G__14648;
+chunk__14641 = G__14649;
+count__14642 = G__14650;
+i__14643 = G__14651;
 continue;
 } else {
-var point = cljs.core.first.call(null,seq__13675__$1);
+var point = cljs.core.first.call(null,seq__14640__$1);
 animation.core.fill_circle.call(null,screen,point,animation.core.point_radius,animation.core.point_color.call(null,point,animation.core.selected_group.call(null,state)));
 
-var G__13687 = cljs.core.next.call(null,seq__13675__$1);
-var G__13688 = null;
-var G__13689 = (0);
-var G__13690 = (0);
-seq__13675 = G__13687;
-chunk__13676 = G__13688;
-count__13677 = G__13689;
-i__13678 = G__13690;
+var G__14652 = cljs.core.next.call(null,seq__14640__$1);
+var G__14653 = null;
+var G__14654 = (0);
+var G__14655 = (0);
+seq__14640 = G__14652;
+chunk__14641 = G__14653;
+count__14642 = G__14654;
+i__14643 = G__14655;
 continue;
 }
 } else {
@@ -161,11 +161,11 @@ return null;
 break;
 }
 });
-animation.core.set_canvas_size_BANG_ = (function animation$core$set_canvas_size_BANG_(canvas,p__13691){
-var map__13692 = p__13691;
-var map__13692__$1 = ((((!((map__13692 == null)))?((((map__13692.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__13692.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__13692):map__13692);
-var w = cljs.core.get.call(null,map__13692__$1,new cljs.core.Keyword(null,"w","w",354169001));
-var h = cljs.core.get.call(null,map__13692__$1,new cljs.core.Keyword(null,"h","h",1109658740));
+animation.core.set_canvas_size_BANG_ = (function animation$core$set_canvas_size_BANG_(canvas,p__14656){
+var map__14657 = p__14656;
+var map__14657__$1 = ((((!((map__14657 == null)))?((((map__14657.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__14657.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__14657):map__14657);
+var w = cljs.core.get.call(null,map__14657__$1,new cljs.core.Keyword(null,"w","w",354169001));
+var h = cljs.core.get.call(null,map__14657__$1,new cljs.core.Keyword(null,"h","h",1109658740));
 canvas.width = w;
 
 return canvas.height = h;
@@ -197,12 +197,12 @@ animation.core.set_mode = (function animation$core$set_mode(input,state){
 return cljs.core.assoc.call(null,state,new cljs.core.Keyword(null,"mode","mode",654403691),animation.core.keyboard_selected_mode.call(null,input));
 });
 animation.core.points_selected_unselected = (function animation$core$points_selected_unselected(points,selected_group){
-var map__13694 = cljs.core.group_by.call(null,(function (point){
+var map__14659 = cljs.core.group_by.call(null,(function (point){
 return cljs.core._EQ_.call(null,point.call(null,new cljs.core.Keyword(null,"group","group",582596132)),selected_group);
 }),points);
-var map__13694__$1 = ((((!((map__13694 == null)))?((((map__13694.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__13694.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__13694):map__13694);
-var selected = cljs.core.get.call(null,map__13694__$1,true);
-var unselected = cljs.core.get.call(null,map__13694__$1,false);
+var map__14659__$1 = ((((!((map__14659 == null)))?((((map__14659.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__14659.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__14659):map__14659);
+var selected = cljs.core.get.call(null,map__14659__$1,true);
+var unselected = cljs.core.get.call(null,map__14659__$1,false);
 return new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"selected","selected",574897764),selected,new cljs.core.Keyword(null,"unselected","unselected",-1210198137),unselected], null);
 });
 animation.core.move_points = (function animation$core$move_points(input,state){
@@ -215,14 +215,14 @@ return and__10832__auto__;
 })())){
 var drag_delta_SINGLEQUOTE_ = animation.core.drag_delta.call(null,input);
 var points = animation.core.current_frame.call(null,state).call(null,new cljs.core.Keyword(null,"points","points",-1486596883));
-var map__13696 = animation.core.points_selected_unselected.call(null,points,animation.core.selected_group.call(null,state));
-var map__13696__$1 = ((((!((map__13696 == null)))?((((map__13696.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__13696.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__13696):map__13696);
-var selected = cljs.core.get.call(null,map__13696__$1,new cljs.core.Keyword(null,"selected","selected",574897764));
-var unselected = cljs.core.get.call(null,map__13696__$1,new cljs.core.Keyword(null,"unselected","unselected",-1210198137));
-var moved_points = cljs.core.map.call(null,((function (drag_delta_SINGLEQUOTE_,points,map__13696,map__13696__$1,selected,unselected){
+var map__14661 = animation.core.points_selected_unselected.call(null,points,animation.core.selected_group.call(null,state));
+var map__14661__$1 = ((((!((map__14661 == null)))?((((map__14661.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__14661.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__14661):map__14661);
+var selected = cljs.core.get.call(null,map__14661__$1,new cljs.core.Keyword(null,"selected","selected",574897764));
+var unselected = cljs.core.get.call(null,map__14661__$1,new cljs.core.Keyword(null,"unselected","unselected",-1210198137));
+var moved_points = cljs.core.map.call(null,((function (drag_delta_SINGLEQUOTE_,points,map__14661,map__14661__$1,selected,unselected){
 return (function (point){
 return cljs.core.merge.call(null,point,animation.geometry.add_vectors.call(null,point,drag_delta_SINGLEQUOTE_),new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"version","version",425292698),(new cljs.core.Keyword(null,"version","version",425292698).cljs$core$IFn$_invoke$arity$1(point) + (1))], null));
-});})(drag_delta_SINGLEQUOTE_,points,map__13696,map__13696__$1,selected,unselected))
+});})(drag_delta_SINGLEQUOTE_,points,map__14661,map__14661__$1,selected,unselected))
 ,selected);
 return animation.core.set_current_points.call(null,state,cljs.core.concat.call(null,moved_points,unselected));
 } else {
@@ -269,23 +269,23 @@ var next_frame_id = (animation.core.current_frame_index.call(null,state) + (1));
 return cljs.core.assoc_in.call(null,state,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"frames","frames",1765687497),next_frame_id], null),frame);
 });
 animation.core.points_lookup = (function animation$core$points_lookup(points){
-return cljs.core.reduce.call(null,(function (lookup,p__13698){
-var map__13699 = p__13698;
-var map__13699__$1 = ((((!((map__13699 == null)))?((((map__13699.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__13699.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__13699):map__13699);
-var p = map__13699__$1;
-var id = cljs.core.get.call(null,map__13699__$1,new cljs.core.Keyword(null,"id","id",-1388402092));
+return cljs.core.reduce.call(null,(function (lookup,p__14663){
+var map__14664 = p__14663;
+var map__14664__$1 = ((((!((map__14664 == null)))?((((map__14664.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__14664.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__14664):map__14664);
+var p = map__14664__$1;
+var id = cljs.core.get.call(null,map__14664__$1,new cljs.core.Keyword(null,"id","id",-1388402092));
 return cljs.core.assoc.call(null,lookup,id,p);
 }),cljs.core.PersistentArrayMap.EMPTY,points);
 });
 animation.core.merge_points = (function animation$core$merge_points(current_points,next_points){
 var current_id__GT_point = animation.core.points_lookup.call(null,current_points);
 return cljs.core.vals.call(null,cljs.core.reduce.call(null,((function (current_id__GT_point){
-return (function (id__GT_point,p__13701){
-var map__13702 = p__13701;
-var map__13702__$1 = ((((!((map__13702 == null)))?((((map__13702.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__13702.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__13702):map__13702);
-var point = map__13702__$1;
-var id = cljs.core.get.call(null,map__13702__$1,new cljs.core.Keyword(null,"id","id",-1388402092));
-var version = cljs.core.get.call(null,map__13702__$1,new cljs.core.Keyword(null,"version","version",425292698));
+return (function (id__GT_point,p__14666){
+var map__14667 = p__14666;
+var map__14667__$1 = ((((!((map__14667 == null)))?((((map__14667.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__14667.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__14667):map__14667);
+var point = map__14667__$1;
+var id = cljs.core.get.call(null,map__14667__$1,new cljs.core.Keyword(null,"id","id",-1388402092));
+var version = cljs.core.get.call(null,map__14667__$1,new cljs.core.Keyword(null,"version","version",425292698));
 var point_exists_QMARK_ = cljs.core.contains_QMARK_.call(null,id__GT_point,id);
 var replace_QMARK_ = (point_exists_QMARK_) && ((cljs.core.get_in.call(null,id__GT_point,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [id,new cljs.core.Keyword(null,"version","version",425292698)], null)) < version));
 if((replace_QMARK_) || (!(point_exists_QMARK_))){
@@ -296,14 +296,14 @@ return id__GT_point;
 });})(current_id__GT_point))
 ,current_id__GT_point,next_points));
 });
-animation.core.merge_frames = (function animation$core$merge_frames(p__13704,p__13705){
-var map__13706 = p__13704;
-var map__13706__$1 = ((((!((map__13706 == null)))?((((map__13706.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__13706.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__13706):map__13706);
-var current_points = cljs.core.get.call(null,map__13706__$1,new cljs.core.Keyword(null,"points","points",-1486596883));
-var map__13707 = p__13705;
-var map__13707__$1 = ((((!((map__13707 == null)))?((((map__13707.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__13707.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__13707):map__13707);
-var next = map__13707__$1;
-var next_points = cljs.core.get.call(null,map__13707__$1,new cljs.core.Keyword(null,"points","points",-1486596883));
+animation.core.merge_frames = (function animation$core$merge_frames(p__14669,p__14670){
+var map__14671 = p__14669;
+var map__14671__$1 = ((((!((map__14671 == null)))?((((map__14671.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__14671.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__14671):map__14671);
+var current_points = cljs.core.get.call(null,map__14671__$1,new cljs.core.Keyword(null,"points","points",-1486596883));
+var map__14672 = p__14670;
+var map__14672__$1 = ((((!((map__14672 == null)))?((((map__14672.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__14672.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__14672):map__14672);
+var next = map__14672__$1;
+var next_points = cljs.core.get.call(null,map__14672__$1,new cljs.core.Keyword(null,"points","points",-1486596883));
 return cljs.core.assoc.call(null,animation.core.to,new cljs.core.Keyword(null,"points","points",-1486596883),animation.core.merge_points.call(null,current_points,next_points));
 });
 animation.core.merge_current_frame_into_next = (function animation$core$merge_current_frame_into_next(state){

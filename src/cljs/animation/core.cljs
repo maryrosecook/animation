@@ -150,7 +150,6 @@
   (if (input/key-pressed? input (input/key->keycode :shift))
     (update state :point-group inc)))
 
-;; todo: finish
 ;; (defn points-at-position
 ;;   [points center radius]
 ;;   (filter (partial geometry/point-in-circle? center radius) points))
