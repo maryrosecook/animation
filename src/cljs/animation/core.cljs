@@ -40,12 +40,11 @@
    :selected-group 1
    :playing? true})
 
-(defn drag-delta
+(defn move-delta
   [input]
-  (let [drag (input/mouse-drag input)]
-    (if (drag :previous)
-      (geometry/subtract-vectors (drag :current) (drag :previous))
-      {:x 0 :y 0})))
+  (let [move (input/mouse-move input)]
+    (geometry/subtract-vectors (move :current) (or (move :previous)
+                                                   (move :current)))))
 
 (defn clear-screen
   [screen window-size]
@@ -125,9 +124,8 @@
 
 (defn move-points
   [input state]
-  (if (and (input/mouse-down? input)
-           (move-mode? state))
-    (let [drag-delta' (drag-delta input)
+  (if (and (move-mode? state))
+    (let [move-delta' (move-delta input)
           points ((current-frame state) :points)
           {selected :selected unselected :unselected}
             (points-selected-unselected points (selected-group state))
@@ -135,7 +133,7 @@
                               (merge point
                                      (geometry/add-vectors
                                       point
-                                      drag-delta')
+                                      move-delta')
                                      {:version (inc (:version point))}))
                             selected)]
       (set-current-points state (concat moved-points unselected)))))

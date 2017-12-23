@@ -28,7 +28,8 @@
    {:position {:x 0 :y 0}
     :down? false
     :clicked? false
-    :drag {:previous nil :current nil}}
+    :drag {:previous nil :current nil}
+    :move {:previous nil :current nil}}
    :keys {:down (hash-set)
           :pressed-state {}}
    :read-fns []})
@@ -58,6 +59,7 @@
       (partial swap! input assoc-in [:mouse :down?] false)))
 
 (def mouse-drag #(get-in % [:mouse :drag]))
+(def mouse-move #(get-in % [:mouse :move]))
 (def mouse-position #(get-in % [:mouse :position]))
 (def mouse-down? #(get-in % [:mouse :down?]))
 (def mouse-clicked? #(get-in % [:mouse :clicked?]))
@@ -138,6 +140,15 @@
      :previous (get-in input [:mouse :drag :current])}
     {:current nil :previous :nil}))
 
+(defn current-move
+  [input]
+  {:current (get-in input [:mouse :position])
+   :previous (get-in input [:mouse :move :current])})
+
+(defn store-move
+  [input]
+  (swap! input assoc-in [:mouse :move] (current-move @input)))
+
 (defn store-drag
   [input]
   (swap! input assoc-in [:mouse :drag] (current-drag @input)))
@@ -162,6 +173,7 @@
   [canvas window]
   (let [input (atom (create-input))]
     (on-tick #(store-drag input))
+    (on-tick #(store-move input))
     (store-mouse-position input canvas)
     (store-mouse-is-clicked input window)
     (store-mouse-is-down input canvas)
