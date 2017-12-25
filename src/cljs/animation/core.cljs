@@ -16,7 +16,6 @@
 (def point-radius 2)
 
 (defn draw-mode? [state] (= :draw (get state :mode)))
-(defn move-mode? [state] (= :move (get state :mode)))
 (def current-frame-index #(% :current-frame-index))
 (def playing? #(% :playing?))
 (def point-group #(% :point-group))
@@ -45,6 +44,10 @@
   (let [move (input/mouse-move input)]
     (geometry/subtract-vectors (move :current) (or (move :previous)
                                                    (move :current)))))
+
+(defn move-mode? [input state]
+  (and (not (= :draw (get state :mode)))
+       (input/mouse-down? input)))
 
 (defn clear-screen
   [screen window-size]
@@ -124,7 +127,7 @@
 
 (defn move-points
   [input state]
-  (if (and (move-mode? state))
+  (if (move-mode? input state)
     (let [move-delta' (move-delta input)
           points ((current-frame state) :points)
           {selected :selected unselected :unselected}
