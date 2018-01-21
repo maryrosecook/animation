@@ -140,10 +140,14 @@
                             selected)]
       (set-current-points state (concat moved-points unselected)))))
 
-(defn rewind-on-4-key
+(defn rewind-on-r-key
   [input state]
-  (if (input/key-down? input (input/key->keycode :4))
-    (assoc state :current-frame-index 0)))
+  (if (input/key-down? input (input/key->keycode :r))
+    (rewind input state)))
+
+(defn rewind
+  [input state]
+  (assoc state :current-frame-index 0))
 
 (defn increment-dot-group-on-shift
   [input state]
@@ -243,7 +247,7 @@
   [input state]
   (->> state
        (default (partial set-mode input))
-       (default (partial rewind-on-4-key input))
+       (default (partial rewind-on-r-key input))
        (default (partial create-points input))
        (default (partial move-points input))
        (default (partial increment-dot-group-on-shift input))

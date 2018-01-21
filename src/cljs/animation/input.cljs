@@ -17,7 +17,7 @@
    :blur goog.events.EventType.BLUR})
 
 (def key->keycode
-  {:4 52
+  {:r 82
    :shift 16
    :tab 9
    :space 32})
