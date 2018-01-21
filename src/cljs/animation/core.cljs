@@ -46,8 +46,7 @@
                                                    (move :current)))))
 
 (defn move-mode? [input state]
-  (and (not (= :draw (get state :mode)))
-       (input/mouse-down? input)))
+  (= :move (get state :mode)))
 
 (defn clear-screen
   [screen window-size]
@@ -112,7 +111,7 @@
   [input]
   (let [button-maps {49 :select
                      16 :draw
-                     51 :move}]
+                     17 :move}]
     (get button-maps (first (input/keys-down input)))))
 
 (defn set-mode
